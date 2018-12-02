@@ -9,13 +9,12 @@ class MobileValidator(RegexValidator):
      regex = r'^01[0125]\d{8}'
      message = 'Not a Valid Mobile Number'
 
-class DoctorSerializer(serializers.ModelSerializer):
+class ReceptionistSerializer(serializers.ModelSerializer):
     password = serializers.CharField(max_length=30,write_only=True)
     mobile = serializers.CharField(max_length=11,validators=[MobileValidator(),])
-
     class Meta:
-        model = Doctor
+        model = Receptionist
         fields=('__all__')
     def create(self, validated_data):
         print(validated_data)
-        return Doctor.objects.create(**validated_data)
+        return Receptionist.objects.create(**validated_data)

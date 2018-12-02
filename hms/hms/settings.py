@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'patient_manager',
     'doctor_manager',
+    'receptionist_manager',
 ]
 
 MIDDLEWARE = [

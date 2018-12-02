@@ -10,7 +10,9 @@ class MobileValidator(RegexValidator):
      message = 'Not a Valid Mobile Number'
 
 class PatientSerializer(serializers.ModelSerializer):
-    password = serializers.CharField(max_length=30,write_only=True) 
+    password = serializers.CharField(max_length=30,write_only=True)
+    mobile = serializers.CharField(max_length=11,validators=[MobileValidator(),])
+
     class Meta:
         model = Patient
         fields=('__all__')
