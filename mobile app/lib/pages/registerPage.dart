@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hms/myWidgets.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
+//import 'package:http/http.dart' as http;
+//import 'dart:convert';
 
 class RegisterPage extends StatefulWidget {
   @override
@@ -45,8 +45,8 @@ class RegisterPageState extends State<RegisterPage> {
 
   void _getInfo() {
     print(userInfo);
-    var url = '';
-    var userInfoJSON = json.encode(userInfo);
+    //var url = '';
+    //var userInfoJSON = json.encode(userInfo);
     //http
     //    .post(url, body: userInfoJSON)
     //    .then((http.Response response) => print(response));

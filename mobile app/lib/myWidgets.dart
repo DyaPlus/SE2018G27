@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'pages/myReservationsPage.dart';
 
 class Page extends StatelessWidget {
   Page({
@@ -35,27 +36,37 @@ class Page extends StatelessWidget {
       drawer: hasDrawer
           ? Drawer(
               child: ListView(
+                
                 children: <Widget>[
                   DrawerHeader(
-                    decoration: BoxDecoration(color: Colors.redAccent),
+                    decoration: BoxDecoration(color: Colors.lightBlueAccent),
                     child: Row(
                       children: <Widget>[
                         Padding(
                           padding: EdgeInsets.all(10.0),
-                          child: Icon(Icons.person),
+                          child: Icon(
+                            Icons.person,
+                            color: Colors.white,
+                          ),
                         ),
                         Center(
                           child: Text(
                             userName,
-                            style: TextStyle(fontSize: 25.0),
+                            style: TextStyle(
+                              fontSize: 25.0,
+                              color: Colors.white,
+                            ),
                           ),
                         )
                       ],
                     ),
                   ),
                   ListTile(
-                    onTap: () => Navigator.pushNamedAndRemoveUntil(context,
-                        '/myReservations', (Route<dynamic> route) => false),
+                    onTap: () => Navigator.pushAndRemoveUntil(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => MyReservations([])),
+                        (Route<dynamic> route) => false),
                     title: Text("My Reservations"),
                   ),
                   Divider(color: Colors.redAccent),
@@ -84,16 +95,24 @@ class MyCard extends StatelessWidget {
   final IconData icon;
   final Text title;
   final Text subtitle;
+  final Function onTap;
+  final Function delete;
 
-  MyCard({@required this.title, @required this.subtitle, @required this.icon});
+  MyCard({
+    @required this.title,
+    @required this.subtitle,
+    @required this.icon,
+    @required this.onTap,
+    @required this.delete,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Card(
       color: Colors.blueGrey[50],
       child: InkWell(
-        splashColor: Colors.lightBlueAccent,
-        onTap: () {},
+        //splashColor: Colors.lightBlueAccent,
+        onTap: onTap,
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
@@ -124,7 +143,7 @@ class MyCard extends StatelessWidget {
                         ),
                       ],
                     ),
-                    onPressed: () => {},
+                    onPressed: delete,
                   )
                 ],
               ),
@@ -270,19 +289,23 @@ class MyBottomAppBar extends StatelessWidget {
 class MyDropDown extends StatefulWidget {
   final String title;
   final List<String> items;
+  final Function(dynamic) onChanged;
 
   MyDropDown({
     @required this.title,
     @required this.items,
+    @required this.onChanged,
   });
 
   @override
   MyDropDownState createState() {
-    return new MyDropDownState();
+    return MyDropDownState();
   }
 }
 
 class MyDropDownState extends State<MyDropDown> {
+  String _currentValue; //= widget.items[0];
+
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -293,9 +316,18 @@ class MyDropDownState extends State<MyDropDown> {
           child: Text(widget.title, style: TextStyle(fontSize: 25.0)),
         ),
         DropdownButton(
-          onChanged: (value) {},
+          value: _currentValue,
+          onChanged: (value) {
+            setState(() {
+              _currentValue = value;
+            });
+            widget.onChanged(value);
+          }, //widget.onChanged(value),
           items: widget.items
-              .map((item) => DropdownMenuItem(child: Text(item)))
+              .map((item) => DropdownMenuItem(
+                    value: item,
+                    child: Text(item),
+                  ))
               .toList(),
         ),
       ],

@@ -21,16 +21,13 @@ class LoginPageState extends State<LoginPage> {
     var url = '';
     var enteredUserInfoJSON = json.encode(enteredUserInfo);
     http.post(url, body: enteredUserInfoJSON);
-    //TODO: wait for confirmation from server
-
-    //Navigator.pushNamedAndRemoveUntil(context, '/home/' + enteredUserInfo['email'], (Route<dynamic> route) => false);
+    //Wait for confirmation from server
 
     Navigator.pushAndRemoveUntil(
         context,
         MaterialPageRoute(
             builder: (context) => MainHomePage(name: enteredUserInfo['email'])),
         (Route<dynamic> route) => false);
-    //Navigator.of(context).push(MaterialPageRoute(builder: (context) => MainHomePage()));
   }
 
   @override
@@ -71,7 +68,6 @@ class LoginPageState extends State<LoginPage> {
                 text: "LOGIN",
                 onPressed: () {
                   _login();
-                  print(enteredUserInfo);
                 },
               ),
             ),

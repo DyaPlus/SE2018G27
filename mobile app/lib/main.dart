@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'pages/homePage_first.dart';
 import 'pages/loginPage.dart';
 import 'pages/registerPage.dart';
-import 'pages/myReservationsPage.dart';
-import 'pages/newReservationPage.dart';
+//import 'pages/myReservationsPage.dart';
+//import 'pages/newReservationPage.dart';
 import 'pages/mainHomePage.dart';
 
 void main() => runApp(HMSApp());
@@ -26,8 +26,6 @@ class _HMSAppState extends State<HMSApp> {
         '/firstHome': (context) => HomePageFirst(),
         '/login': (context) => LoginPage(),
         '/register': (context) => RegisterPage(),
-        '/myReservations': (context) => MyReservations(),
-        '/newReservation': (context) => NewReservation(),
         '/home': (context) => MainHomePage(name: "Omar"),
       },
     );
