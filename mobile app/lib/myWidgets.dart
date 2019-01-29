@@ -69,6 +69,14 @@ class Page extends StatelessWidget {
                         (Route<dynamic> route) => false),
                     title: Text("My Reservations"),
                   ),
+                  ListTile(
+                    onTap: () => Navigator.pushAndRemoveUntil(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => MyReservations([])),
+                            (Route<dynamic> route) => false),
+                    title: Text("Feedback"),
+                  ),
                   Divider(color: Colors.redAccent),
                   ListTile(
                     leading: RotatedBox(
