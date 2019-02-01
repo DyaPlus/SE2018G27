@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'pages/myReservationsPage.dart';
 import 'pages/feedback.dart';
 import 'pages/myPrescriptionsPage.dart';
+import 'pages/myReports.dart';
 import 'pages/mainHomePage.dart';
 
 class Page extends StatelessWidget {
@@ -87,6 +88,16 @@ class Page extends StatelessWidget {
                           (Route<dynamic> route) => false);
                     },
                     title: Text("Prescriptions"),
+                  ),
+                  ListTile(
+                    onTap: () {
+                      Navigator.pushAndRemoveUntil(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => MyReports()),
+                              (Route<dynamic> route) => false);
+                    },
+                    title: Text("Reports"),
                   ),
                   Divider(color: Colors.redAccent), 
                   ListTile(
