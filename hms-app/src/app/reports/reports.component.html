@@ -1,0 +1,22 @@
+
+
+<form #f="ngForm" (ngSubmit)="submit(f)">
+    <div class="container">
+                    <br>
+                  <div class="form-group">
+                    <label for="PatientName">PatientName</label>
+                    <input type="text" ngModel  name="PatientName"  #PatientName="ngModel" class="form-control" id="PatientName" placeholder="Please Enter Patient Name">
+                  </div>
+                  
+                  <div class="form-group">
+                        <label for="PatientName">Email address</label>
+                        <input type="datetime-local" ngModel  name="Date"  #Date="ngModel" class="form-control" id="Date" placeholder="Please Enter Date">
+                  </div>
+
+                  <button>Submit</button>
+                  
+    </div>
+    
+  </form>
+
+  <button (click)="display_results()">What's a get request (Check Code+Console)</button>
