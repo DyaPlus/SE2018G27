@@ -1,20 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:hms/myWidgets.dart';
 
-class AppointmentDetailsPage extends StatelessWidget {
-  final Map<String, dynamic> appointment;
+class PrescriptionDetailsPage extends StatelessWidget {
+  final Map<String, dynamic> prescription;
 
-  AppointmentDetailsPage(this.appointment);
+  PrescriptionDetailsPage(this.prescription);
   @override
   Widget build(BuildContext context) {
     return Page(
-      title: "Appointment",
+      title: "Prescription",
       body: Center(
         child: ListView.builder(
-          itemCount: appointment.length,
+          itemCount: prescription.length,
           itemBuilder: (context, int i) {
-            var keys = appointment.keys.toList();
-            var values = appointment.values.toList();
+            var keys = prescription.keys.toList();
+            var values = prescription.values.toList();
             return Text("${keys[i]}: ${values[i]}");
           },
         ),

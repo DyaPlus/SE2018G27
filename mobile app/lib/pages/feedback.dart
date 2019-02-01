@@ -6,13 +6,6 @@ import 'package:http/http.dart' as http;
 import 'package:hms/pages/mainHomePage.dart';
 
 class NewFeedback extends StatefulWidget {
-
-  var feedback = "";
-
-  void sendFeedback() {
-    var url = '';
-    http.post(url, body: feedback);
-  }
   @override
   NewFeedBackState createState() {
     return NewFeedBackState();
@@ -20,47 +13,54 @@ class NewFeedback extends StatefulWidget {
 }
 
 class NewFeedBackState extends State<NewFeedback> {
+  String feedback = "";
+
+  void sendFeedback() {
+    String url = '';
+    http.post(url, body: feedback);
+  }
+
   void showAlert(BuildContext context) {
-    if (widget.feedback != "")
+    if (feedback != "")
       showDialog(
           context: context,
           builder: (BuildContext context) => AlertDialog(
-            title: Text("send feedback"),
-            content: Text('send?'),
-            actions: <Widget>[
-              FlatButton(
-                child: Text('No'),
-                onPressed: () => Navigator.pop(context),
-              ),
-              FlatButton(
-                child: Text("Yes"),
-                onPressed: () {
-                  widget.sendFeedback();
-                  Navigator.pushAndRemoveUntil(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) =>
-                              MainHomePage(name: "omar")),
+                title: Text("Send Feedback"),
+                content: Text('Send?'),
+                actions: <Widget>[
+                  FlatButton(
+                    child: Text('No'),
+                    onPressed: () => Navigator.pop(context),
+                  ),
+                  FlatButton(
+                    child: Text("Yes"),
+                    onPressed: () {
+                      sendFeedback();
+                      Navigator.pushAndRemoveUntil(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => MainHomePage(name: "omar")),
                           (Route<dynamic> route) => false);
-                },
-              )
-            ],
-          ));
+                    },
+                  )
+                ],
+              ));
     else
       showDialog(
         context: context,
         builder: (BuildContext context) => AlertDialog(
-          title: Text("Error"),
-          content: Text('Information not complete'),
-          actions: <Widget>[
-            FlatButton(
-              child: Text('OK'),
-              onPressed: () => Navigator.pop(context),
+              title: Text("Error"),
+              content: Text("Feedback can't be empty"),
+              actions: <Widget>[
+                FlatButton(
+                  child: Text('OK'),
+                  onPressed: () => Navigator.pop(context),
+                ),
+              ],
             ),
-          ],
-        ),
       );
   }
+
   @override
   Widget build(BuildContext context) {
     return Page(
@@ -71,12 +71,12 @@ class NewFeedBackState extends State<NewFeedback> {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[
             Input(
-              text: "write your feedback",
+              text: "Write your feedback",
               onChanged: (value) {
                 setState(() {
-                  widget.feedback = value;
+                  feedback = value;
                 });
-                print(widget.feedback);
+                print(feedback);
               },
               // onChanged: (value) => widget.feedback = value,
             ),
@@ -90,7 +90,7 @@ class NewFeedBackState extends State<NewFeedback> {
         icon: Icon(Icons.add),
         label: Text("send feedback"),
         onPressed: () {
-          print(widget.feedback);
+          print(feedback);
           showAlert(context);
         },
       ),

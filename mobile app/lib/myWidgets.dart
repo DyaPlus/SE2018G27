@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'pages/myReservationsPage.dart';
+import 'pages/feedback.dart';
+import 'pages/myPrescriptionsPage.dart';
+import 'pages/mainHomePage.dart';
 
 class Page extends StatelessWidget {
   Page({
@@ -36,7 +39,6 @@ class Page extends StatelessWidget {
       drawer: hasDrawer
           ? Drawer(
               child: ListView(
-                
                 children: <Widget>[
                   DrawerHeader(
                     decoration: BoxDecoration(color: Colors.lightBlueAccent),
@@ -65,19 +67,28 @@ class Page extends StatelessWidget {
                     onTap: () => Navigator.pushAndRemoveUntil(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => MyReservations([])),
+                            builder: (context) => MyReservations()),
                         (Route<dynamic> route) => false),
                     title: Text("My Reservations"),
                   ),
                   ListTile(
                     onTap: () => Navigator.pushAndRemoveUntil(
                         context,
-                        MaterialPageRoute(
-                            builder: (context) => MyReservations([])),
-                            (Route<dynamic> route) => false),
+                        MaterialPageRoute(builder: (context) => NewFeedback()),
+                        (Route<dynamic> route) => false),
                     title: Text("Feedback"),
                   ),
-                  Divider(color: Colors.redAccent),
+                  ListTile(
+                    onTap: () {
+                      Navigator.pushAndRemoveUntil(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => MyPrescriptions()),
+                          (Route<dynamic> route) => false);
+                    },
+                    title: Text("Prescriptions"),
+                  ),
+                  Divider(color: Colors.redAccent), 
                   ListTile(
                     leading: RotatedBox(
                         quarterTurns: 2, child: Icon(Icons.exit_to_app)),

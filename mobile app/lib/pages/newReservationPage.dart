@@ -1,18 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:hms/myWidgets.dart';
 import 'myReservationsPage.dart';
-//import 'package:http/http.dart' as http;
-//import 'dart:convert';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class NewReservation extends StatelessWidget {
-  final List<Map<String, dynamic>> reservations;
-  NewReservation(this.reservations);
+
+  final String url = "";
 
   final Map<String, dynamic> newReservation = {
     'doctor': null,
     'time': null,
     'department': null,
   };
+
+  Future sendReservation(){
+    print(newReservation);
+    //return http.post(url, body: json.encode(newReservation));
+    return http.post(url, body: newReservation);
+  }
 
   void showAlert(BuildContext context) {
     if (newReservation['doctor'] != null &&
@@ -31,12 +37,12 @@ class NewReservation extends StatelessWidget {
                   FlatButton(
                     child: Text("Yes"),
                     onPressed: () {
-                      reservations.add(newReservation);
+                      sendReservation();
                       Navigator.pushAndRemoveUntil(
                           context,
                           MaterialPageRoute(
                               builder: (context) =>
-                                  MyReservations(reservations)),
+                                  MyReservations()),
                           (Route<dynamic> route) => false);
                       //Navigator.pop(context);
                     },

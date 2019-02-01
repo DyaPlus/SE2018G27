@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+
 import 'package:hms/myWidgets.dart';
 import 'newReservationPage.dart';
 import 'appointmentDetails.dart';
 import 'package:intl/intl.dart';
 
 class MyReservations extends StatefulWidget {
-  final List<Map<String, dynamic>> reservations;
-  MyReservations(this.reservations);
-
   @override
   MyReservationsState createState() {
     return MyReservationsState();
@@ -15,47 +15,58 @@ class MyReservations extends StatefulWidget {
 }
 
 class MyReservationsState extends State<MyReservations> {
-  List<Map<String, dynamic>> myReservations = [
-    {
-      'doctor': 'Omar Ahmad',
-      'time': DateTime(2018, 12, 31, 6, 00),
-      'department': 'Dermatology',
-    },
-    {
-      'doctor': 'Dyaa Adel',
-      'time': DateTime(2019, 1, 31, 7, 00),
-      'department': 'Neurology',
-    },
-    {
-      'doctor': 'Abd El Rahman Wael',
-      'time': DateTime(2019, 2, 31, 5, 30),
-      'department': 'Gynecology',
-    },
-    {
-      'doctor': 'Omar Ahmed',
-      'time': DateTime(2018, 12, 29, 9, 00),
-      'department': 'Gynecology',
-    },
-  ];
-
   final DateFormat formatter = DateFormat('yyyy-MM-dd');
+
+  Future getReservations() async {
+    final response =
+        await http.get("https://jsonplaceholder.typicode.com/users/");
+
+    if (response.statusCode == 200) {
+      return json.decode(response.body);
+    } else {
+      throw Exception('Failed to load');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Page(
       title: "My Reservations",
-      hasDrawer: false,
+      hasDrawer: true,
       floatingActionButton: FloatingActionButton(
         onPressed: () => Navigator.pushAndRemoveUntil(
             context,
-            MaterialPageRoute(
-                builder: (context) => NewReservation(widget.reservations)),
+            MaterialPageRoute(builder: (context) => NewReservation()),
             (Route<dynamic> route) => false),
         child: Icon(
           Icons.add,
           color: Colors.white,
         ),
       ),
+      body: FutureBuilder(
+        future: getReservations(),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            return ListView.builder(
+              itemCount: snapshot.data.length,
+              itemBuilder: (BuildContext context, int i) => MyCard(
+                    delete: () {},
+                    title: Text("${snapshot.data[i]['name']}"),
+                    subtitle: Text(""),
+                    icon: Icons.book,
+                    onTap: () => Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) =>
+                            AppointmentDetailsPage(snapshot.data[i]))),
+                  ),
+            );
+          } else if (snapshot.hasError) {
+            return Text("${snapshot.error}");
+          }
+
+          return Center(child: CircularProgressIndicator());
+        },
+      ),
+      /*
       body: ListView.builder(
         itemCount: widget.reservations.length,
         itemBuilder: (BuildContext context, int i) => MyCard(
@@ -72,6 +83,7 @@ class MyReservationsState extends State<MyReservations> {
               icon: Icons.card_giftcard,
             ),
       ),
+      */
       bottomNavigationBar: MyBottomAppBar(),
     );
   }
