@@ -40,7 +40,7 @@ class SignUp(ObtainAuthToken):
         serializer = UserSerializer(data=request.data)
         if (serializer.is_valid()):
             print(serializer.data)
-            user = User.objects.create(username=username,password=password)
+            user = User.objects.create_user(username=username,password=password)
             profileserializer = HMSProfileSerializer(data={
             'user' : user.id,
             'full_name' : full_name,
