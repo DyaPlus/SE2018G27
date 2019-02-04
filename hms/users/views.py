@@ -73,7 +73,8 @@ class HMSProfileList(generics.ListCreateAPIView):
     serializer_class = HMSProfileSerializer
 
 class Test(APIView):
+    
     def get(self, request):
-        user = request.user
-        serializer = HMSProfileSerializer(user.profile)
-        return Response(serializer.data)
+        #user = request.user
+        #serializer = HMSProfileSerializer(user.profile)
+        return Response({"test":"worked"})

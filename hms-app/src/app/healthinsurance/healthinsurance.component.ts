@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-healthinsurance',
@@ -12,4 +13,11 @@ export class HealthinsuranceComponent implements OnInit {
   ngOnInit() {
   }
 
-}
+  
+    
+  
+  }
+
+ 
+
+

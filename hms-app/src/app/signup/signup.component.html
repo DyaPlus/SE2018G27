@@ -1,0 +1,55 @@
+
+<form #f="ngForm" (ngSubmit)="submit(f)">
+  <div class="container">
+                  <br>
+                <div class="form-group">
+                  <label for="username">username</label>
+                  <input type="text" ngModel  name="username"  #username="ngModel" class="form-control" id="username" placeholder="Please Enter username">
+                </div>
+                
+                <div class="form-group">
+                      <label for="password">password</label>
+                      <input type="text" ngModel  name="password"  #password="ngModel" class="form-control" id="password" placeholder="password">
+                </div>
+
+                <div class="form-group">
+                  <label for="password2">password2</label>
+                  <input type="text" ngModel  name="password2"  #password2="ngModel" class="form-control" id="password2" placeholder="password2">
+                </div>
+
+                <div class="form-group">
+                  <label for="full_name">full_name</label>
+                  <input type="text" ngModel  name="full_name"  #full_name="ngModel" class="form-control" id="full_name" placeholder="full_name">
+                </div>
+
+                <div class="form-group">
+                  <label for="type">type</label>
+                  <input type="text" ngModel  name="type"  #type="ngModel" class="form-control" id="type" placeholder="type">
+                </div>
+
+                <div class="form-group">
+                  <label for="national_id">national_id</label>
+                  <input type="text" ngModel  name="national_id"  #national_id="ngModel" class="form-control" id="national_id" placeholder="national_id">
+                </div>
+
+                <div class="form-group">
+                  <label for="mobile">mobile</label>
+                  <input type="text" ngModel  name="mobile"  #mobile="ngModel" class="form-control" id="mobile" placeholder="mobile">
+                </div>
+
+
+
+
+                <button>Submit</button>
+                
+  </div>
+  
+</form>
+
+
+
+
+
+
+
+
