@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'dart:async';
-
+import '../myWidgets.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert' as convert;
 
@@ -130,10 +130,10 @@ http.post(url, body: {"name" :nacontr.text , "birth" : _DOB , "blood": blcontr.t
 ////////////////////////////////
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Center(child: Text("PROFILE")),
-      ),
+    return Page(
+         title: "PROFILE",
+      centerTitle: true,
+       hasDrawer: true,
       body: Container(
         child: ListView(children: <Widget>[
           Column(mainAxisSize: MainAxisSize.max, children: <Widget>[
