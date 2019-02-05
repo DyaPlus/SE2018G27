@@ -1,3 +1,4 @@
+
 import 'package:flutter/material.dart';
 
 import 'pages/homePage_first.dart';
@@ -26,7 +27,7 @@ class _HMSAppState extends State<HMSApp> {
         '/firstHome': (context) => HomePageFirst(),
         '/login': (context) => LoginPage(),
         '/register': (context) => RegisterPage(),
-        '/home': (context) => MainHomePage(name: "Omar"),
+        '/home': (context) => MainHomePage(/*name: "Omar"*/),
       },
     );
   }
