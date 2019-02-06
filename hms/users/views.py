@@ -13,6 +13,8 @@ from .templates import *
 from django.template import Context, Template
 import datetime
 from django.core.exceptions import ObjectDoesNotExist
+from django.core.exceptions import PermissionDenied
+from django.db import IntegrityError
 
 def genPDF(target,title,content):
     switcher = {
@@ -192,3 +194,59 @@ class GetReportPDF(APIView):
             response.write(pdf)
             return response
         return Response({"valid":False, "errors":serializer.errors},status=status.HTTP_400_BAD_REQUEST)
+
+class QuerySlot(APIView):
+    def get(self,request,doctorid):
+        try:
+            user=request.user
+            doctor= User.objects.get(id=doctorid)
+            docprofile= HMSProfile.objects.get(user=doctor)
+            slots = Slot.objects.filter(doctor=docprofile,is_open=True)
+            serializer = SlotSerializer(slots,many=True)
+            if not serializer.data:
+                return Response({"valid":False, "errors":'No Slots Available'},status=status.HTTP_400_BAD_REQUEST)
+            return Response(serializer.data)
+        except ObjectDoesNotExist as e:
+            return Response({"valid":False, "errors":str(e)},status=status.HTTP_400_BAD_REQUEST)
+
+class ReserveSlot(APIView):
+    def post(self, request):
+        try:
+            user = request.user
+            slot = Slot.objects.get(pk=request.data.get("slot_id"))
+
+            if slot.available_no<=0 or slot.time < timezone.now() or not slot.is_open:
+                if slot.is_open:
+                    slot.is_open=False
+                    slot.save()
+                raise PermissionDenied("This slot is not available right now.")
+
+            reservation=Reservation.objects.create(doctor=slot.doctor, slot=slot, patient=user.profile)
+
+            slot.available_no = slot.available_no -1
+            if slot.available_no <= 0:
+                slot.is_open=False
+            slot.save()
+            serializer = ReservationSerializer(reservation)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        except Slot.DoesNotExist:
+            return Response({"errors": {"slot": ["Slot not found!"]}}, status=status.HTTP_404_NOT_FOUND)
+
+        except IntegrityError as e:
+            print(e)
+            return Response({'errors':{"slot": 'You have already reserved a slot'}}, status=status.HTTP_403_FORBIDDEN)
+
+        except PermissionDenied as e:
+            error = e.args[0]
+            return Response({"errors": {"slot": error}}, status=status.HTTP_403_FORBIDDEN)
+
+class QueryReservations(APIView):
+    def get(self,request):
+        user = request.user
+        profile = user.profile
+        reservations = profile.reservations
+        print(reservations)
+        serializer = ReservationSerializer(reservations,many=True)
+        if not serializer.data:
+            return Response({"valid":False, "errors":'No Reservations Available'},status=status.HTTP_400_BAD_REQUEST)
+        return Response(serializer.data)

@@ -3,6 +3,7 @@ from rest_framework.validators import UniqueValidator
 from .models import *
 from django.core.exceptions import ValidationError
 from django.core.validators import RegexValidator
+from django.utils import timezone
 
 
 class MobileValidator(RegexValidator):
@@ -25,3 +26,23 @@ class ReportSerializer(serializers.ModelSerializer):
      class Meta:
          model = Report
          fields=('__all__')
+
+class SlotSerializer(serializers.ModelSerializer):
+    time = serializers.DateTimeField(format='%A %d-%m %I:%M %p')
+    class Meta:
+        model = Slot
+        fields = ('id','time')
+
+class ReservationSerializer(serializers.ModelSerializer):
+    slot=serializers.SerializerMethodField()
+    doctor=serializers.SerializerMethodField()
+    patient=serializers.SerializerMethodField()
+    class Meta:
+         model = Reservation
+         fields=('__all__')
+    def get_slot(self,obj):
+        return str(obj.slot)
+    def get_doctor(self,obj):
+        return obj.doctor.full_name
+    def get_patient(self,obj):
+        return obj.patient.full_name
