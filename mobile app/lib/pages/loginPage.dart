@@ -26,7 +26,10 @@ class LoginPageState extends State<LoginPage> {
     Navigator.pushAndRemoveUntil(
         context,
         MaterialPageRoute(
-            builder: (context) => MainHomePage(name: enteredUserInfo['email'])),
+            builder: (context) => MainHomePage(//name: enteredUserInfo['email']
+            )
+            
+            ),
         (Route<dynamic> route) => false);
   }
 

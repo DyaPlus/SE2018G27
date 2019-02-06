@@ -12,6 +12,8 @@ import { routingModule } from './app.routing';
 import { NavbarComponent } from './navbar/navbar.component';
 
 import { HttpClientModule } from '@angular/common/http';
+import { SignupComponent } from './signup/signup.component';
+import { LoginComponent } from './login/login.component';
 
 @NgModule({
   declarations: [
@@ -19,7 +21,9 @@ import { HttpClientModule } from '@angular/common/http';
     AnalysisComponent,
     ReportsComponent,
     HealthinsuranceComponent,
-    NavbarComponent
+    NavbarComponent,
+    SignupComponent,
+    LoginComponent
   ],
   imports: [
     BrowserModule,

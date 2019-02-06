@@ -101,6 +101,7 @@ class HMSProfileList(generics.ListCreateAPIView):
     queryset = HMSProfile.objects.all()
     serializer_class = HMSProfileSerializer
 
+<<<<<<< HEAD
 #Profile View
 class GetProfile(APIView):
     def get(self, request):
@@ -192,3 +193,11 @@ class GetReportPDF(APIView):
             response.write(pdf)
             return response
         return Response({"valid":False, "errors":serializer.errors},status=status.HTTP_400_BAD_REQUEST)
+=======
+class Test(APIView):
+    
+    def get(self, request):
+        #user = request.user
+        #serializer = HMSProfileSerializer(user.profile)
+        return Response({"test":"worked"})
+>>>>>>> 3da1f4fb27970d0216906339190bf97ceaa706e1
