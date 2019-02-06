@@ -15,4 +15,4 @@ Real-time face recognition program using Google's facenet.
 * to try this you need to make sure of all needed dependencies.
 * Finally, download the pretrained model.
 ## Result
-<img src="https://github.com/bearsprogrammer/real-time-deep-face-recogniton/blob/master/realtime_demo_pic.PNG" width="60%">
+<img src="realtime_demo_pic.PNG" width="60%">
