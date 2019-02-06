@@ -15,9 +15,13 @@ class UserSerializer(serializers.ModelSerializer):
 		model = User
 		fields=('id','username','password')
 
-
 class HMSProfileSerializer(serializers.ModelSerializer):
      mobile = serializers.CharField(max_length=11,validators=[MobileValidator(),])
      class Meta:
          model = HMSProfile
+         fields=('__all__')
+
+class ReportSerializer(serializers.ModelSerializer):
+     class Meta:
+         model = Report
          fields=('__all__')
