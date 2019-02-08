@@ -12,6 +12,8 @@ urlpatterns = [
      url(r'^queryslot/(?P<doctorid>[0-9]+)/$', QuerySlot.as_view()),
      url(r'^reserveslot/$', ReserveSlot.as_view()),
      url(r'^queryres/$', QueryReservations.as_view()),
+     url(r'^docs/$', QueryDoctors.as_view()),
+
 ]
 
 urlpatterns += [

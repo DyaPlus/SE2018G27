@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from "rxjs/Observable";
+import { HttpHeaders } from '@angular/common/http';
 
 @Component({
   selector: 'app-reports',
@@ -19,35 +19,66 @@ export class ReportsComponent implements OnInit {
 
   ngOnInit() {}
 
-submit(params:any) 
-{
-  //Returns the JSON Value of a form.
-  console.log(params.value)
+  target:any
+  content:any
+  title:any
   
-}
-
-
-
-//gets the data needed from the apii
-
-get_from_api(): Observable<any> {
-
-  return this.http.get<any>(this.url);
   
-}
-
-data_recieved:any
-
-//display_data_from_api_when_click
-display_results()
-{
-  this.get_from_api().subscribe(data => {
-    this.data_recieved = data;
-    console.log(this.data_recieved);
-  });
- 
-}
+  
+  submit(params:any) 
+  {
+    var currentUser = JSON.parse(localStorage.getItem('currentUser'));
+    var token = currentUser.token; // your token
+    var tok=token
+   const httpOptions = {
+    headers: new HttpHeaders({
+      'Authorization': "Token"+" "+tok
+    })
+                      };
 
 
+    this.target=params.value["target"];
+    this.content=params.value["content"];
+    this.title=params.value["title"];
+    
 
-}
+    this.http.post("http://127.0.0.1:8000/users/genreport/",
+    {
+    "target":  this.target,
+    "content":  this.content,
+    "title":  this.title,
+    },{responseType: 'blob',headers:httpOptions.headers})
+    
+    .subscribe(
+    data  => {
+    
+    //downloads the file
+    var blob = data
+    var url= window.URL.createObjectURL(blob);
+    window.open(url);
+    
+    },
+    
+    error  => {
+    
+    console.log("Error", error);
+    
+    }
+    
+    );
+       
+  
+  }
+
+    
+  }
+
+
+
+
+
+
+
+
+
+

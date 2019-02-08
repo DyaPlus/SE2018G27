@@ -1,0 +1,13 @@
+<div *ngFor="let doc of docs; let i = index" >
+    <div class="card" style="width: 18rem;">
+        <div class="card-body">
+          <h5 class="card-title" style="color:black ">{{doc.full_name}}</h5>
+          <p class="card-text">{{doc.id}}</p>
+          <a (click)="submit(doc.id)" class="btn btn-primary">Select this doc</a>
+        </div>
+      </div>
+      <br>
+</div>
+
+
+

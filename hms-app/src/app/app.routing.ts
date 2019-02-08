@@ -4,6 +4,7 @@ import { AnalysisComponent } from './analysis/analysis.component';
 import { ReportsComponent } from './reports/reports.component';
 import { HealthinsuranceComponent } from './healthinsurance/healthinsurance.component';
 import { SignupComponent } from './signup/signup.component';
+import { OnlineReserveComponent } from './online-reserve/online-reserve.component';
 
 
 const routes: Routes = [
@@ -11,6 +12,7 @@ const routes: Routes = [
     { path: 'Analysis', component: AnalysisComponent },
     { path: 'Reports', component: ReportsComponent },
     { path: 'SignUp', component: SignupComponent },
+    { path: 'OnlineReservations', component: OnlineReserveComponent },
 
 ];
 

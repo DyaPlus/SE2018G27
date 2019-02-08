@@ -3,15 +3,27 @@
 <form #f="ngForm" (ngSubmit)="submit(f)">
     <div class="container">
                     <br>
+
                   <div class="form-group">
-                    <label for="PatientName">PatientName</label>
-                    <input type="text" ngModel  name="PatientName"  #PatientName="ngModel" class="form-control" id="PatientName" placeholder="Please Enter Patient Name">
+                    <label for="target">target</label>
+                    <input type="text" ngModel  name="target"  #target="ngModel" class="form-control" id="target" placeholder="Please add target">
+                  </div>  
+
+                  <div class="form-group">
+                    <label for="content">content</label>
+                    <input type="text" ngModel  name="content"  #content="ngModel" class="form-control" id="content" placeholder="Please add content of report">
                   </div>
                   
                   <div class="form-group">
-                        <label for="PatientName">Email address</label>
-                        <input type="datetime-local" ngModel  name="Date"  #Date="ngModel" class="form-control" id="Date" placeholder="Please Enter Date">
+                    <label for="title">title:</label>
+                    <select class="form-control" ngModel #title="ngModel"   name="title" id="title">
+                      <option>E</option>
+                      <option>R</option>
+                      <option>A</option>
+                    </select>
                   </div>
+
+                 
 
                   <button>Submit</button>
                   
@@ -19,4 +31,3 @@
     
   </form>
 
-  <button (click)="display_results()">What's a get request (Check Code+Console)</button>

@@ -16,6 +16,10 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.core.exceptions import PermissionDenied
 from django.db import IntegrityError
 
+path_wkthmltopdf = r'C:\wkhtmltopdf\bin\wkhtmltopdf.exe'
+config = pdfkit.configuration(wkhtmltopdf=path_wkthmltopdf)
+
+
 def genPDF(target,title,content):
     switcher = {
     'E':'Examination Result',
@@ -137,7 +141,7 @@ class GenerateReport(APIView):
                 string = t.render(Context({'title':switcher.get(serializer.data['title']),'date':(str(now.day)+'/'+str(now.month)
                 +' '+str(now.hour)+':'+str(now.minute)),
                 'content':serializer.data['content'],'target':patient.username}))
-                pdf = pdfkit.from_string(string, False, options=options)
+                pdf = pdfkit.from_string(string, False, options=options,configuration=config)
                 response = HttpResponse(content_type='application/pdf')
                 filename = 'somefilename.pdf'
                 response['Content-Disposition'] = 'attachment; filename="{}"'.format(filename)
@@ -249,4 +253,11 @@ class QueryReservations(APIView):
         serializer = ReservationSerializer(reservations,many=True)
         if not serializer.data:
             return Response({"valid":False, "errors":'No Reservations Available'},status=status.HTTP_400_BAD_REQUEST)
+        return Response(serializer.data)
+
+class QueryDoctors(APIView):
+    permission_classes = (permissions.AllowAny,)
+    def get(self,request):
+        Docs = HMSProfile.objects.filter(type="D")
+        serializer=HMSProfileSerializer(Docs,many=True)
         return Response(serializer.data)
