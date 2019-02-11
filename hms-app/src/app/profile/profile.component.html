@@ -50,11 +50,11 @@
 
   </div>
   <div class="col">
-      <button type="button" data-toggle="modal" data-target="#Reservations" class="btn btn-dark">Reservations</button>
+      <button  type="button" data-toggle="modal" data-target="#Reservations" class="btn btn-dark">Reservations</button>
   </div>
 
   <div class="col">
-      <button type="button" data-toggle="modal" data-target="#Reports" class="btn btn-dark">Reports</button>
+      <button (click)="get_reports()" type="button" data-toggle="modal" data-target="#Reports" class="btn btn-dark">Reports</button>
   </div>
 </div>
 
@@ -68,7 +68,7 @@
           </button>
         </div>
         <div class="modal-body">
-          Reservations
+          ...
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -87,7 +87,28 @@
           </button>
         </div>
         <div class="modal-body">
-          Reports
+            <span style="font-size:30px; color:black"> Reports </span>
+            <div *ngFor="let report of reports, let i = index">
+              <div class="row">
+                <div class="col">
+                    id : {{report.id}}
+                </div>
+
+                <div class="col">
+                    Title : {{report.title}}
+                </div>
+
+                <div class="col">
+                    download
+                </div>
+                
+
+
+              </div>
+              
+              
+            </div>
+        
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>

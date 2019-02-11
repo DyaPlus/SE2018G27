@@ -20,9 +20,27 @@ export class ProfileComponent implements OnInit {
     };
   
   info:any
+  reports:any
+  reservations:any
 
   get_reports()
   {
+    this.http.get("http://127.0.0.1:8000/users/getreportdetails/1/",this.httpOptions)
+    
+    .subscribe(
+    data  => {
+      this.reports=data
+      console.log(data)
+                  
+    },
+    
+    error  => {
+    
+    console.log("Error", error);
+    
+    }
+    
+    );
 
   }
 
@@ -30,6 +48,13 @@ export class ProfileComponent implements OnInit {
   {
     
   }
+
+
+  download_selected_report()
+  {
+
+  }
+  
   ngOnInit() 
   {
     this.http.get("http://127.0.0.1:8000/users/profile/",this.httpOptions)

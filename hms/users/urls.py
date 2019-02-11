@@ -13,6 +13,8 @@ urlpatterns = [
      url(r'^reserveslot/$', ReserveSlot.as_view()),
      url(r'^queryres/$', QueryReservations.as_view()),
      url(r'^docs/$', QueryDoctors.as_view()),
+     url(r'^lms/$', QueryUsers.as_view()),
+
 
 ]
 

@@ -18,6 +18,7 @@ import { OnlineReserveComponent } from './online-reserve/online-reserve.componen
 import { HomepageComponent } from './homepage/homepage.component';
 import { AboutusComponent } from './aboutus/aboutus.component';
 import { ProfileComponent } from './profile/profile.component';
+import { FooterComponent } from './footer/footer.component';
 
 @NgModule({
   declarations: [
@@ -31,7 +32,8 @@ import { ProfileComponent } from './profile/profile.component';
     OnlineReserveComponent,
     HomepageComponent,
     AboutusComponent,
-    ProfileComponent
+    ProfileComponent,
+    FooterComponent
   ],
   imports: [
     BrowserModule,
