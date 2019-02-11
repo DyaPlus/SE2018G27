@@ -15,6 +15,8 @@ import { HttpClientModule } from '@angular/common/http';
 import { SignupComponent } from './signup/signup.component';
 import { LoginComponent } from './login/login.component';
 import { OnlineReserveComponent } from './online-reserve/online-reserve.component';
+import { HomepageComponent } from './homepage/homepage.component';
+import { AboutusComponent } from './aboutus/aboutus.component';
 
 @NgModule({
   declarations: [
@@ -25,7 +27,9 @@ import { OnlineReserveComponent } from './online-reserve/online-reserve.componen
     NavbarComponent,
     SignupComponent,
     LoginComponent,
-    OnlineReserveComponent
+    OnlineReserveComponent,
+    HomepageComponent,
+    AboutusComponent
   ],
   imports: [
     BrowserModule,

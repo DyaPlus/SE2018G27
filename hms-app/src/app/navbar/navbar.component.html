@@ -5,18 +5,28 @@
   </button>
   <div class="collapse navbar-collapse" id="navbarNavDropdown">
     <ul class="navbar-nav">
-      <li class="nav-item active">
-        <a class="nav-link" routerLink="/Reports"> Reports <span class="sr-only">(current)</span></a>
+      <li *ngIf=" (reg_or_not) && (doc_or_not) " class="nav-item active">
+        <a class="nav-link" routerLink="/Reports"> Make Reports <span class="sr-only">(current)</span></a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" routerLink="/Analysis">Analysis</a>
+        <a class="nav-link" routerLink="/HomePage">Home Page</a>
+      </li>
+      <li *ngIf=" !(reg_or_not)" class="nav-item">
+        <a class="nav-link" routerLink="/SignUp">Sign up</a>
+      </li>
+      <li *ngIf=" (reg_or_not) && !(doc_or_not) " class="nav-item">
+        <a class="nav-link" routerLink="/OnlineReservations"> Make Online Reservations</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" routerLink="/SignUp">SignUP</a>
+        <a class="nav-link" routerLink="/AboutUs">About us</a>
       </li>
-      <li class="nav-item">
-        <a class="nav-link" routerLink="/OnlineReservations">Online Reservations</a>
+      <li *ngIf=" (reg_or_not)" class="nav-item">
+        <a class="nav-link" (click)="deletetoken()">Logout</a>
       </li>
+      <li *ngIf=" !(reg_or_not)" class="nav-item">
+        <a class="nav-link" routerLink="/Login">Login</a>
+      </li>
+
            
     </ul>
   </div>

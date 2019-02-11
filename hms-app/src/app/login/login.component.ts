@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-
+import { HttpClient } from '@angular/common/http';
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
@@ -7,9 +8,49 @@ import { Component, OnInit } from '@angular/core';
 })
 export class LoginComponent implements OnInit {
 
-  constructor() { }
+  constructor(public http: HttpClient,public router:Router ) { }
 
   ngOnInit() {
   }
 
+  username:any
+  password:any
+  
+  submit(params:any) 
+  {
+    
+   
+    this.username=params.value["username"];
+    this.password=params.value["password"];
+   
+    this.http.post("http://127.0.0.1:8000/users/signin/",
+    {
+    "username":  this.username,
+    
+    "password":  this.password,
+    })
+    .subscribe(
+    data  => {
+    console.log("POST Request is successful ", data);
+    localStorage.setItem('currentUser', JSON.stringify({ token: data['token'], type: data['user_type'] }));
+    this.router.navigateByUrl("/HomePage")
+    },
+    
+    error  => {
+    
+    console.log("Error", error);
+    
+    }
+    
+    );
+       
+  
+  }
+  
+
+    
+  
+
+
 }
+
