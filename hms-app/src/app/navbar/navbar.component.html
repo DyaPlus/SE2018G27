@@ -26,6 +26,9 @@
       <li *ngIf=" !(reg_or_not)" class="nav-item">
         <a class="nav-link" routerLink="/Login">Login</a>
       </li>
+      <li *ngIf=" (reg_or_not)" class="nav-item">
+        <a class="nav-link" routerLink="/Profile">Profile</a>
+      </li>
 
            
     </ul>

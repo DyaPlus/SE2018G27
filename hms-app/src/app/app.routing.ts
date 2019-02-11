@@ -8,6 +8,7 @@ import { OnlineReserveComponent } from './online-reserve/online-reserve.componen
 import { AboutusComponent } from './aboutus/aboutus.component';
 import { HomepageComponent } from './homepage/homepage.component';
 import { LoginComponent } from './login/login.component';
+import { ProfileComponent } from './profile/profile.component';
 
 
 const routes: Routes = [
@@ -18,7 +19,8 @@ const routes: Routes = [
     { path: 'OnlineReservations', component: OnlineReserveComponent },
     { path:'AboutUs',    component:AboutusComponent},
     { path:'HomePage',    component:HomepageComponent},
-    { path:'Login',    component:LoginComponent}
+    { path:'Login',    component:LoginComponent},
+    {path:"Profile",component:ProfileComponent}
 
 
 ];
