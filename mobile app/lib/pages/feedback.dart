@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hms/myWidgets.dart';
-//import 'package:http/http.dart' as http;
-//import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'dart:convert';
 import 'package:hms/pages/mainHomePage.dart';
 
 class NewFeedback extends StatefulWidget {
@@ -16,8 +15,12 @@ class NewFeedBackState extends State<NewFeedback> {
   String feedback = "";
 
   void sendFeedback() {
+    Map<String, String> enteredFeedback = {
+      'feedback': '',
+    };
     String url = '';
-    http.post(url, body: feedback);
+    var enteredFeedbackJSON = json.encode(enteredFeedback);
+    http.post(url, body: enteredFeedbackJSON);
   }
 
   void showAlert(BuildContext context) {
