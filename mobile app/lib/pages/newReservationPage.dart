@@ -4,8 +4,14 @@ import 'myReservationsPage.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
-class NewReservation extends StatelessWidget {
+class NewReservation extends StatefulWidget {
+  @override
+  NewReservationState createState() {
+    return NewReservationState();
+  }
+}
 
+class NewReservationState extends State<NewReservation> {
   final String url = "";
 
   final Map<String, dynamic> newReservation = {
@@ -14,7 +20,35 @@ class NewReservation extends StatelessWidget {
     'department': null,
   };
 
-  Future sendReservation(){
+  List doctors = List();
+
+  Future<String> getDoctors() async {
+    var res = await http.get(Uri.encodeFull(
+        "https://secret-lowlands-85631.herokuapp.com/users/docs/"));
+    var resBody = json.decode(res.body);
+
+    setState(() {
+      doctors = resBody;
+    });
+
+    return "Sucess";
+  }
+
+  // Future<String> getDoctors() async {
+  //   final response = await http
+  //       .get("https://secret-lowlands-85631.herokuapp.com/users/docs/");
+
+  //   if (response.statusCode == 200) {
+  //     setState(() {
+  //       doctors = json.decode(response.body);
+  //     });
+  //     return "SUCCESS";
+  //   } else {
+  //     throw Exception('Failed to load');
+  //   }
+  // }
+
+  Future sendReservation() {
     print(newReservation);
     //return http.post(url, body: json.encode(newReservation));
     return http.post(url, body: newReservation);
@@ -41,8 +75,7 @@ class NewReservation extends StatelessWidget {
                       Navigator.pushAndRemoveUntil(
                           context,
                           MaterialPageRoute(
-                              builder: (context) =>
-                                  MyReservations()),
+                              builder: (context) => MyReservations()),
                           (Route<dynamic> route) => false);
                       //Navigator.pop(context);
                     },
@@ -66,6 +99,12 @@ class NewReservation extends StatelessWidget {
   }
 
   @override
+  void initState() {
+    super.initState();
+    this.getDoctors();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Page(
       hasDrawer: true,
@@ -74,24 +113,53 @@ class NewReservation extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[
-            MyDropDown(
-              title: "Department",
-              onChanged: (value) => newReservation['department'] = value,
-              items: [
-                "Dermatology",
-                "Neurology",
-                "Gynecology",
-              ],
+            FutureBuilder(
+              future: getDoctors(),
+              initialData: doctors,
+              builder: (BuildContext context, AsyncSnapshot snapshot) {
+                switch (snapshot.connectionState) {
+                  case ConnectionState.none:
+                    return Text('Press button to start.');
+                  case ConnectionState.active:
+                  case ConnectionState.waiting:
+                    return Center(child: CircularProgressIndicator());
+                  case ConnectionState.done:
+                    if (snapshot.hasError)
+                      return Text('Error: ${snapshot.error}');
+                    return Text('Result: ${snapshot.data}');
+                }
+                return null;
+
+                if (snapshot.hasData) {
+                  print(snapshot.data);
+                  return MyDropDown(
+                    title: "Doctor",
+                    onChanged: (value) => newReservation['doctor'] = value,
+                    items: [],
+                  );
+                } else if (snapshot.hasError) {
+                  return Text("${snapshot.error}");
+                } else {
+                  return Container();
+                }
+              },
             ),
-            MyDropDown(
-              title: "Doctor",
-              onChanged: (value) => newReservation['doctor'] = value,
-              items: [
-                "Dyaa Adel",
-                "Abd El Rahman Helaly",
-                "Omar Ahmed",
-              ],
-            ),
+            // DropdownButton(
+            //     onChanged: (value) {
+            //       print(doctors);
+            //       print(value);
+            //     },
+            //     items: doctors
+            //         .map((item) => DropdownMenuItem(
+            //               value: item['name'],
+            //               child: Text('name'),
+            //             ))
+            //         .toList()),
+            // MyDropDown(
+            //   title: "Doctor",
+            //   onChanged: (value) => newReservation['doctor'] = value,
+            //   items: doctors,
+            //),
             MyRoundedButton(
               text: "Select Date and time",
               onPressed: () async {
@@ -103,14 +171,12 @@ class NewReservation extends StatelessWidget {
                   initialDate: DateTime.now(),
                   initialDatePickerMode: DatePickerMode.day,
                 );
-                print(newReservation['time']);
                 TimeOfDay time = await showTimePicker(
                   context: context,
                   initialTime: TimeOfDay.now(),
                 );
                 newReservation['time'] = newReservation['time']
                     .add(Duration(hours: time.hour, minutes: time.minute));
-                print(newReservation['time']);
               },
             ),
           ],
@@ -122,7 +188,9 @@ class NewReservation extends StatelessWidget {
         foregroundColor: Colors.white,
         icon: Icon(Icons.add),
         label: Text("New Reservation"),
-        onPressed: () => showAlert(context),
+        onPressed: () {
+          showAlert(context);
+        },
       ),
     );
   }
