@@ -1,0 +1,126 @@
+<div class="container">
+  <br>
+  <br>
+  <div class="row">
+    <div class="col"></div>
+    <div style="text-align: center" class="col"><i style="font-size:40px" class="fas fa-user-md"></i></div>
+    <div class="col"></div>
+  </div>
+<br>
+<br>
+  <table class="table ">
+      <thead class="thead-dark">
+        <tr>
+          <th scope="col">Attribute</th>
+          <th scope="col">Value</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <th scope="row">Name</th>
+          <td>{{info.full_name}}</td>
+        </tr>
+        <tr>
+          <th scope="row">Mobile</th>
+          <td>{{info.mobile}}</td>
+        </tr>
+        <tr>
+          <th scope="row">National ID</th>
+          <td>{{info.national_id}}</td>
+        </tr>
+        <tr>
+            <th scope="row">Profile type</th>
+            <div *ngIf="info.type=='D' ">
+                <td>Doctor</td>
+            </div>
+            <div *ngIf="info.type=='P' ">
+                <td>Patient</td>
+            </div>
+          </tr>
+          
+
+      </tbody>
+    </table>
+
+<br>
+<br>
+
+<div class="row">
+  <div class="col">
+
+  </div>
+  <div class="col">
+      <button  type="button" data-toggle="modal" data-target="#Reservations" class="btn btn-dark">Reservations</button>
+  </div>
+
+  <div class="col">
+      <button (click)="get_reports()" type="button" data-toggle="modal" data-target="#Reports" class="btn btn-dark">Reports</button>
+  </div>
+</div>
+
+<div class="modal fade" id="Reservations" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          ...
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+</div>
+
+<div class="modal fade" id="Reports" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+            <span style="font-size:30px; color:black"> Reports </span>
+            <div *ngFor="let report of reports, let i = index">
+              <div class="row">
+                <div class="col">
+                    id : {{report.id}}
+                </div>
+
+                <div class="col">
+                    Title : {{report.title}}
+                </div>
+
+                <div class="col">
+                    download
+                </div>
+                
+
+
+              </div>
+              
+              
+            </div>
+        
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+</div>

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-signup',
   templateUrl: './signup.component.html',
@@ -8,7 +8,7 @@ import { HttpClient } from '@angular/common/http';
 })
 export class SignupComponent implements OnInit {
 
-  constructor(public http: HttpClient) { }
+  constructor(public http: HttpClient,public router:Router) { }
 
   ngOnInit() {
   }
@@ -48,6 +48,8 @@ export class SignupComponent implements OnInit {
     data  => {
     console.log("POST Request is successful ", data);
     localStorage.setItem('currentUser', JSON.stringify({ token: data['token'], type: data['user_type'] }));
+    this.router.navigateByUrl("/HomePage")
+
     },
     
     error  => {

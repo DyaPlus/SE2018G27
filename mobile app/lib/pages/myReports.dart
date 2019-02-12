@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'reportDetails.dart';
 
 import 'package:hms/myWidgets.dart';
 import 'newReservationPage.dart';
@@ -33,16 +34,7 @@ class MyReportsState extends State<MyReports> {
     return Page(
       title: "My Reports",
       hasDrawer: true,
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => Navigator.pushAndRemoveUntil(
-            context,
-            MaterialPageRoute(builder: (context) => NewReservation()),
-                (Route<dynamic> route) => false),
-        child: Icon(
-          Icons.add,
-          color: Colors.white,
-        ),
-      ),
+
       body: FutureBuilder(
         future: getReports(),
         builder: (context, snapshot) {
@@ -56,7 +48,7 @@ class MyReportsState extends State<MyReports> {
                 icon: Icons.book,
                 onTap: () => Navigator.of(context).push(MaterialPageRoute(
                     builder: (context) =>
-                        AppointmentDetailsPage(snapshot.data[i]))),
+                        reportDetailsPage(snapshot.data[i]))),
               ),
             );
           } else if (snapshot.hasError) {

@@ -200,6 +200,7 @@ class GetReportPDF(APIView):
         return Response({"valid":False, "errors":serializer.errors},status=status.HTTP_400_BAD_REQUEST)
 
 class QuerySlot(APIView):
+    
     def get(self,request,doctorid):
         try:
             user=request.user
@@ -218,6 +219,7 @@ class ReserveSlot(APIView):
         try:
             user = request.user
             slot = Slot.objects.get(pk=request.data.get("slot_id"))
+            print(slot)
 
             if slot.available_no<=0 or slot.time < timezone.now() or not slot.is_open:
                 if slot.is_open:
@@ -257,7 +259,29 @@ class QueryReservations(APIView):
 
 class QueryDoctors(APIView):
     permission_classes = (permissions.AllowAny,)
+    
     def get(self,request):
-        Docs = HMSProfile.objects.filter(type="D")
-        serializer=HMSProfileSerializer(Docs,many=True)
+        Docs=[]
+        #Docs = HMSProfile.objects.filter(type="D")
+        all_users=User.objects.all()
+        for account in all_users:
+            id=account.id
+            profile=HMSProfile.objects.get(user=account)
+            #print(profile)
+            #print("new iteration")
+            if(profile.type == 'D'):
+                Docs.append(account)
+            
+        serializer=UserSerializer(Docs,many=True)
+         
         return Response(serializer.data)
+
+class QueryUsers(APIView):
+    permission_classes = (permissions.AllowAny,)
+    def get(self,request):
+        all_users=User.objects.all()
+        serializer=UserSerializer(all_users,many=True)
+         
+        return Response(serializer.data)
+
+

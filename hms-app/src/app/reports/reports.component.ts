@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { HttpHeaders } from '@angular/common/http';
+import { DomSanitizer, SafeResourceUrl, SafeUrl} from '@angular/platform-browser';
 
 @Component({
   selector: 'app-reports',
@@ -15,15 +16,21 @@ export class ReportsComponent implements OnInit {
   private url = "https://jsonplaceholder.typicode.com/todos";
   
   //HTTP Client is for the POST/GET requests.
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient,private sanitizer: DomSanitizer) { }
 
   ngOnInit() {}
 
   target:any
   content:any
   title:any
-  
-  
+  url_1:any
+  blob_1:any
+  ahmed=0;
+
+  killme()
+  {
+    return this.url_1
+  }
   
   submit(params:any) 
   {
@@ -47,15 +54,24 @@ export class ReportsComponent implements OnInit {
     "target":  this.target,
     "content":  this.content,
     "title":  this.title,
-    },{responseType: 'blob',headers:httpOptions.headers})
+    },{responseType: 'arraybuffer',headers:httpOptions.headers})
     
     .subscribe(
     data  => {
     
+    console.log(data)
     //downloads the file
-    var blob = data
-    var url= window.URL.createObjectURL(blob);
-    window.open(url);
+    //this.blob_1 = data
+    //this.url_1= window.URL.createObjectURL(this.blob_1);
+    //window.open(this.url_1)
+    var file = new Blob([data], {type: 'application/pdf'});
+    var fileURL = URL.createObjectURL(file);
+    this.url_1=this.sanitizer.bypassSecurityTrustResourceUrl(fileURL)
+    this.ahmed=1
+
+    
+    
+    
     
     },
     

@@ -13,17 +13,18 @@ export class OnlineReserveComponent implements OnInit {
 
   docs:any
 
-  ngOnInit()
-  {
-      var currentUser = JSON.parse(localStorage.getItem('currentUser'));
-      var token = currentUser.token; // your token
-      var tok=token
-      const httpOptions = {
+  currentUser = JSON.parse(localStorage.getItem('currentUser'));
+  token = this.currentUser.token; // your token
+  tok=this.token
+  httpOptions = {
       headers: new HttpHeaders({
-        'Authorization': "Token"+" "+tok
+        'Authorization': "Token"+" "+this.tok
       })
     };
 
+  ngOnInit()
+  {
+         
     this.http.get("http://127.0.0.1:8000/users/docs/")
     
     .subscribe(
@@ -44,9 +45,62 @@ export class OnlineReserveComponent implements OnInit {
   }
 
 
+  changer=0
+  slots:any
+  selected_doc:any 
+  selected_slot:any
+
   submit(params:any)
   {
+    this.changer=1
     console.log(params)
+    this.selected_doc=params
+    this.http.get("http://127.0.0.1:8000/users/queryslot/"+params+"/",this.httpOptions)
+    
+    .subscribe(
+    data  => {
+      //console.log(data)
+      this.slots=data
+                  
+    },
+    
+    error  => {
+    
+    console.log("Error", error);
+    
+    }
+    
+    );
+
+
   }
 
-}
+  reserve_slot(params:any)
+  {
+    this.selected_slot=params
+    this.http.post("http://127.0.0.1:8000/users/reserveslot/",
+    {
+    "slot_id":  this.selected_slot
+   
+    },this.httpOptions)
+    
+    .subscribe(
+    data  => {
+      console.log(data)
+    
+    console.log(data)
+    },
+    
+    error  => {
+    
+    console.log("Error", error);
+    
+    }
+    
+    );
+       
+  
+  }
+
+  }
+

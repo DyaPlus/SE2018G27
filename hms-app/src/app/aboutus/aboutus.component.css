@@ -1,0 +1,47 @@
+.body {
+    font: 400 15px Lato, sans-serif;
+    line-height: 1.8;
+    color: #303030;
+}
+
+.h2 {
+    font-size: 24px;
+    text-transform: uppercase;
+    color: #303030;
+    font-weight: 600;
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+.jumbotron {
+    background-color: #ececec;
+    color: #303030;
+    padding: 100px 25px;
+    font-family: Montserrat, sans-serif;
+}
+
+.container-fluid {
+    padding: 60px 50px;
+}
+
+.carousel-control.right,
+.carousel-control.left {
+    background-image: none;
+    color: #818181;
+}
+
+.carousel-indicators li {
+    border-color: #818181;
+}
+
+.carousel-indicators li.active {
+    background-color: #818181;
+}
+
+.item h4 {
+    font-size: 19px;
+    line-height: 1.375em;
+    font-weight: 400;
+    font-style: italic;
+    margin: 70px 0;
+}
