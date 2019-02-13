@@ -1,15 +1,15 @@
-
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import 'pages/homePage_first.dart';
 import 'pages/loginPage.dart';
 import 'pages/registerPage.dart';
-//import 'pages/myReservationsPage.dart';
-//import 'pages/newReservationPage.dart';
 import 'pages/mainHomePage.dart';
 
-void main() => runApp(HMSApp());
+import 'globals.dart' as globals;
+
+void main() {
+  runApp(HMSApp());
+}
 
 class HMSApp extends StatefulWidget {
   @override
@@ -17,23 +17,18 @@ class HMSApp extends StatefulWidget {
 }
 
 class _HMSAppState extends State<HMSApp> {
-
   @override
   void initState() {
-    ()async{
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-      final String token = prefs.getString("token");
-
-      print(token);
-    };
     super.initState();
+    globals.getToken();
   }
 
   @override
   Widget build(BuildContext context) {
+    print(globals.token.length);
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: home(),
+      home: (globals.token.length != 0) ? MainHomePage() : HomePageFirst(),
       theme: theme(),
       initialRoute: '/',
       routes: {
@@ -44,10 +39,6 @@ class _HMSAppState extends State<HMSApp> {
       },
     );
   }
-}
-
-Widget home() {
-  return HomePageFirst();
 }
 
 ThemeData theme() {

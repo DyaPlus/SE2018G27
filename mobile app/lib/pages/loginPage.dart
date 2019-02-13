@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'dart:convert';
 
 import 'package:hms/myWidgets.dart';
 import 'mainHomePage.dart';
+import 'package:hms/globals.dart' as globals;
 
 class LoginPage extends StatefulWidget {
   @override
@@ -18,34 +20,36 @@ class LoginPageState extends State<LoginPage> {
   };
 
   void _login() async {
-    var url = 'https://secret-lowlands-85631.herokuapp.com/users/signin/';
+    //var url = 'https://secret-lowlands-85631.herokuapp.com/users/signin/';
+    var url = globals.domain + "users/signin/";
     var enteredUserInfoJSON = json.encode(enteredUserInfo);
     final http.Response response = await http.post(url,
         body: enteredUserInfoJSON,
         headers: {"Content-Type": "application/json"});
+    final Map<String, dynamic> responseData = json.decode(response.body);
 
-    print(enteredUserInfoJSON);
-    print("${response.statusCode}" + " ${response.body}");
+    if (response.statusCode == 200) {
+      globals.setToken(responseData['token']);
 
-    if (response.statusCode == 400) {
+      Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(builder: (context) => MainHomePage()),
+          (Route<dynamic> route) => false);
+    } else if (response.statusCode == 400) {
+      return showDialog(
+          context: context,
+          builder: (BuildContext context) => AlertDialog(
+                title: Text("Error"),
+                content: Text("Wrong Credentials"),
+              ));
+    } else {
       return showDialog(
         context: context,
         builder: (BuildContext context) => AlertDialog(
-              title: Text("Error"),
-              content: Text("Wrong Credentials"),
+              title: Text("Failed"),
+              content: Text(response.body),
             ),
       );
-    }
-
-    if (response.statusCode == 200) {
-      // Navigator.pushAndRemoveUntil(
-      //     context,
-      //     MaterialPageRoute(
-      //         builder: (context) => MainHomePage(//name: enteredUserInfo['email']
-      //         )
-
-      //         ),
-      //     (Route<dynamic> route) => false);
     }
   }
 
