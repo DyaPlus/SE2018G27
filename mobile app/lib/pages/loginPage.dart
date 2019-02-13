@@ -13,24 +13,40 @@ class LoginPage extends StatefulWidget {
 
 class LoginPageState extends State<LoginPage> {
   Map<String, String> enteredUserInfo = {
-    'email': '',
+    'username': '',
     'password': '',
   };
 
-  void _login() {
-    var url = '';
+  void _login() async {
+    var url = 'https://secret-lowlands-85631.herokuapp.com/users/signin/';
     var enteredUserInfoJSON = json.encode(enteredUserInfo);
-    http.post(url, body: enteredUserInfoJSON);
-    //Wait for confirmation from server
+    final http.Response response = await http.post(url,
+        body: enteredUserInfoJSON,
+        headers: {"Content-Type": "application/json"});
 
-    Navigator.pushAndRemoveUntil(
-        context,
-        MaterialPageRoute(
-            builder: (context) => MainHomePage(//name: enteredUserInfo['email']
-            )
-            
+    print(enteredUserInfoJSON);
+    print("${response.statusCode}" + " ${response.body}");
+
+    if (response.statusCode == 400) {
+      return showDialog(
+        context: context,
+        builder: (BuildContext context) => AlertDialog(
+              title: Text("Error"),
+              content: Text("Wrong Credentials"),
             ),
-        (Route<dynamic> route) => false);
+      );
+    }
+
+    if (response.statusCode == 200) {
+      // Navigator.pushAndRemoveUntil(
+      //     context,
+      //     MaterialPageRoute(
+      //         builder: (context) => MainHomePage(//name: enteredUserInfo['email']
+      //         )
+
+      //         ),
+      //     (Route<dynamic> route) => false);
+    }
   }
 
   @override
@@ -45,11 +61,10 @@ class LoginPageState extends State<LoginPage> {
             ),
             Input(
               text: "Email",
-              onChanged: (value) => enteredUserInfo['email'] = value,
+              onChanged: (value) => enteredUserInfo['username'] = value,
               padding: 3.0,
-              icon: Icons.email,
-              label: "Enter your email",
-              type: TextInputType.emailAddress,
+              icon: Icons.account_circle,
+              label: "Enter your username",
             ),
             Container(
               height: 50.0,

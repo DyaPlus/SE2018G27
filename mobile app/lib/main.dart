@@ -1,5 +1,6 @@
 
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'pages/homePage_first.dart';
 import 'pages/loginPage.dart';
@@ -16,6 +17,18 @@ class HMSApp extends StatefulWidget {
 }
 
 class _HMSAppState extends State<HMSApp> {
+
+  @override
+  void initState() {
+    ()async{
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      final String token = prefs.getString("token");
+
+      print(token);
+    };
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(

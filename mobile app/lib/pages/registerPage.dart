@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:hms/myWidgets.dart';
-//import 'package:http/http.dart' as http;
-//import 'dart:convert';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class RegisterPage extends StatefulWidget {
   @override
@@ -10,58 +11,72 @@ class RegisterPage extends StatefulWidget {
 
 class RegisterPageState extends State<RegisterPage> {
   Map<String, dynamic> userInfo = {
-    'fullName': '',
-    'nationalID': '',
-    'email': '',
+    'username': '',
     'password': '',
+    'password2': '',
+    'full_name': '',
+    'type': '',
+    'national_id': '',
+    'mobile': '',
   };
+
   String _confirmPassword = '';
 
   ColorSwatch _fullNameColor = Colors.blue;
   ColorSwatch _nationalIDColor = Colors.blue;
-  ColorSwatch _emailColor = Colors.blue;
+  ColorSwatch _usernameColor = Colors.blue;
   ColorSwatch _passwordColor = Colors.blue;
+  ColorSwatch _mobileColor = Colors.blue;
   ColorSwatch _confirmPasswordColor = Colors.blue;
   ColorSwatch _buttonColor = Colors.blue;
 
   bool _infoReady() {
-    if (userInfo['fullName'] == '' ||
-        userInfo['nationalID'] == '' ||
-        userInfo['email'] == '' ||
+    //print(userInfo);
+
+    if (userInfo['username'] == '' ||
         userInfo['password'] == '' ||
+        userInfo['password2'] == '' ||
+        userInfo['full_name'] == '' ||
+        userInfo['type'] == '' ||
+        userInfo['national_id'] == '' ||
+        userInfo['mobile'] == '' ||
         _confirmPassword == '' ||
         _confirmPassword != userInfo['password']) return false;
-    // if (!userInfo['email'].contains('@')) {
-    //   setState(() {
-    //     _emailColor = Colors.red;
-    //   });
-    //   return false;
-    // }
+
     setState(() {
       _buttonColor = Colors.blue;
     });
     return true;
   }
 
-  void _getInfo() {
-    print(userInfo);
-    //var url = '';
-    //var userInfoJSON = json.encode(userInfo);
-    //http
-    //    .post(url, body: userInfoJSON)
-    //    .then((http.Response response) => print(response));
+  Future<String> _getInfo() async {
+    var url = 'https://secret-lowlands-85631.herokuapp.com/users/signup/';
+    var userInfoJSON = json.encode(userInfo);
+    final response = await http.post(url,
+        body: userInfoJSON, headers: {"Content-Type": "application/json"});
+    final Map<String, dynamic> responseData = json.decode(response.body);
+
+    if (response.statusCode == 200) {
+      print(response.body);
+      final SharedPreferences prefs = await SharedPreferences.getInstance();
+      prefs.setString('token', responseData['token']);
+      return response.body;
+    } else {
+      print("FAIL");
+      print(response.body);
+    }
   }
 
   void _infoNotReady() {
     setState(() {
       _buttonColor = Colors.grey;
     });
-    if (userInfo['fullName'] == '') {
+    if (userInfo['full_name'] == '') {
       setState(() {
         _fullNameColor = Colors.red;
       });
     }
-    if (userInfo['nationalID'] == '') {
+    if (userInfo['national_id'] == '') {
       setState(() {
         _nationalIDColor = Colors.red;
       });
@@ -70,13 +85,13 @@ class RegisterPageState extends State<RegisterPage> {
         _nationalIDColor = Colors.blue;
       });
     }
-    if (userInfo['email'] == '') {
+    if (userInfo['username'] == '') {
       setState(() {
-        _emailColor = Colors.red;
+        _usernameColor = Colors.red;
       });
     } else {
       setState(() {
-        _emailColor = Colors.blue;
+        _usernameColor = Colors.blue;
       });
     }
     if (userInfo['password'] == '') {
@@ -91,6 +106,11 @@ class RegisterPageState extends State<RegisterPage> {
     if (_confirmPassword != userInfo['password'] || _confirmPassword == '') {
       _confirmPasswordColor = Colors.red;
     }
+    if (userInfo['mobile'] == '') {
+      setState(() {
+        _mobileColor = Colors.red;
+      });
+    }
   }
 
   @override
@@ -100,11 +120,23 @@ class RegisterPageState extends State<RegisterPage> {
       body: ListView(
         children: <Widget>[
           Input(
+              text: "Username",
+              icon: Icons.account_circle,
+              padding: 10.0,
+              onChanged: (value) {
+                userInfo['username'] = value;
+                setState(() {
+                  _usernameColor = Colors.green;
+                });
+              },
+              label: "Enter your username",
+              color: _usernameColor),
+          Input(
             text: "Full Name",
             icon: Icons.account_circle,
             padding: 10.0,
             onChanged: (value) {
-              userInfo['fullName'] = value;
+              userInfo['full_name'] = value;
               setState(() {
                 _fullNameColor = Colors.green;
               });
@@ -119,7 +151,7 @@ class RegisterPageState extends State<RegisterPage> {
             icon: Icons.credit_card,
             padding: 10.0,
             onChanged: (value) {
-              userInfo['nationalID'] = value;
+              userInfo['national_id'] = value;
               setState(() {
                 _nationalIDColor = Colors.green;
               });
@@ -127,20 +159,24 @@ class RegisterPageState extends State<RegisterPage> {
             label: "Enter your national ID",
             color: _nationalIDColor,
           ),
-          Input(
-            type: TextInputType.emailAddress,
-            text: "Email",
-            icon: Icons.email,
-            padding: 10.0,
-            onChanged: (value) {
-              userInfo['email'] = value;
-              setState(() {
-                _emailColor = Colors.green;
-              });
-            },
-            label: "Enter your email address",
-            color: _emailColor,
+          MyDropDown(
+            title: "Type",
+            items: ["P", "D"],
+            onChanged: (value) => setState(() => userInfo['type'] = value),
           ),
+          Input(
+              text: "Mobile number",
+              padding: 10.0,
+              label: "Enter your mobile number",
+              icon: Icons.phone,
+              color: _mobileColor,
+              type: TextInputType.numberWithOptions(),
+              onChanged: (value) {
+                setState(() {
+                  userInfo['mobile'] = value;
+                  _mobileColor = Colors.green;
+                });
+              }),
           Input(
               text: "Password",
               icon: Icons.lock,
@@ -163,6 +199,7 @@ class RegisterPageState extends State<RegisterPage> {
                 setState(() {
                   _confirmPassword = value;
                   _confirmPasswordColor = Colors.green;
+                  userInfo['password2'] = value;
                 });
               } else {
                 setState(() {
@@ -178,7 +215,14 @@ class RegisterPageState extends State<RegisterPage> {
             child: Container(
               child: MyRoundedButton(
                 color: _infoReady() ? _buttonColor : Colors.grey,
-                onPressed: () => _infoReady() ? _getInfo() : _infoNotReady(),
+                // onPressed: () => _infoReady() ? _getInfo() : _infoNotReady(),
+                onPressed: () {
+                  if (_infoReady()) {
+                    print(_getInfo());
+                  } else {
+                    _infoNotReady();
+                  }
+                },
                 text: "REGISTER",
               ),
             ),

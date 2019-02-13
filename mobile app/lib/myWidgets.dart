@@ -43,25 +43,32 @@ class Page extends StatelessWidget {
                 children: <Widget>[
                   DrawerHeader(
                     decoration: BoxDecoration(color: Colors.lightBlueAccent),
-                    child: Row(
-                      children: <Widget>[
-                        Padding(
-                          padding: EdgeInsets.all(10.0),
-                          child: Icon(
-                            Icons.person,
-                            color: Colors.white,
-                          ),
-                        ),
-                        Center(
-                          child: Text(
-                            userName,
-                            style: TextStyle(
-                              fontSize: 25.0,
+                    child: GestureDetector(
+                      onTap: () => Navigator.pushAndRemoveUntil(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => MainHomePage()),
+                          (Route<dynamic> route) => false),
+                      child: Row(
+                        children: <Widget>[
+                          Padding(
+                            padding: EdgeInsets.all(10.0),
+                            child: Icon(
+                              Icons.person,
                               color: Colors.white,
                             ),
                           ),
-                        )
-                      ],
+                          Center(
+                            child: Text(
+                              userName,
+                              style: TextStyle(
+                                fontSize: 25.0,
+                                color: Colors.white,
+                              ),
+                            ),
+                          )
+                        ],
+                      ),
                     ),
                   ),
                   ListTile(
@@ -93,13 +100,12 @@ class Page extends StatelessWidget {
                     onTap: () {
                       Navigator.pushAndRemoveUntil(
                           context,
-                          MaterialPageRoute(
-                              builder: (context) => MyReports()),
-                              (Route<dynamic> route) => false);
+                          MaterialPageRoute(builder: (context) => MyReports()),
+                          (Route<dynamic> route) => false);
                     },
                     title: Text("Reports"),
                   ),
-                  Divider(color: Colors.redAccent), 
+                  Divider(color: Colors.redAccent),
                   ListTile(
                     leading: RotatedBox(
                         quarterTurns: 2, child: Icon(Icons.exit_to_app)),
@@ -343,7 +349,7 @@ class MyDropDownState extends State<MyDropDown> {
       children: <Widget>[
         Padding(
           padding: EdgeInsets.all(10.0),
-          child: Text(widget.title, style: TextStyle(fontSize: 25.0)),
+          child: Text(widget.title, style: TextStyle(fontSize: 15.0)),
         ),
         DropdownButton(
           value: _currentValue,
@@ -358,7 +364,7 @@ class MyDropDownState extends State<MyDropDown> {
                     value: item,
                     child: Text(item),
                   ))
-              .toList(),
+              .toList()
         ),
       ],
     );
