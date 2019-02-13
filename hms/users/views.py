@@ -19,7 +19,6 @@ from django.db import IntegrityError
 path_wkthmltopdf = r'C:\wkhtmltopdf\bin\wkhtmltopdf.exe'
 config = pdfkit.configuration(wkhtmltopdf=path_wkthmltopdf)
 
-
 def genPDF(target,title,content):
     switcher = {
     'E':'Examination Result',
@@ -40,7 +39,7 @@ def genPDF(target,title,content):
     string = t.render(Context({'title':switcher.get(title),'date':(str(now.day)+'/'+str(now.month)
     +' '+str(now.hour)+':'+str(now.minute)),
     'content':content,'target':patient.username}))
-    return pdfkit.from_string(string, False, options=options)
+    return pdfkit.from_string(string, False, options=options , configuration=config)
 #Sign in View
 class CustomAuthToken(ObtainAuthToken):
     permission_classes = (permissions.AllowAny,)
@@ -283,5 +282,13 @@ class QueryUsers(APIView):
         serializer=UserSerializer(all_users,many=True)
          
         return Response(serializer.data)
+
+class what_is_my_ip(APIView):
+    #permission_classes = (permissions.AllowAny,)
+    def get(self, request):
+        user = request.user
+        id=user.id
+        return Response({"id":id})
+
 
 
