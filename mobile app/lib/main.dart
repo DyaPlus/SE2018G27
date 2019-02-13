@@ -5,9 +5,12 @@ import 'pages/loginPage.dart';
 import 'pages/registerPage.dart';
 import 'pages/mainHomePage.dart';
 
+import 'package:shared_preferences/shared_preferences.dart';
+
 import 'globals.dart' as globals;
 
-void main() {
+void main() async {
+  globals.prefs = await SharedPreferences.getInstance();
   runApp(HMSApp());
 }
 
@@ -19,8 +22,8 @@ class HMSApp extends StatefulWidget {
 class _HMSAppState extends State<HMSApp> {
   @override
   void initState() {
-    super.initState();
     globals.getToken();
+    super.initState();
   }
 
   @override
@@ -28,14 +31,14 @@ class _HMSAppState extends State<HMSApp> {
     print(globals.token.length);
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: (globals.token.length != 0) ? MainHomePage() : HomePageFirst(),
+      home: (globals.token.length == 0) ? HomePageFirst() : MainHomePage(),
       theme: theme(),
       initialRoute: '/',
       routes: {
         '/firstHome': (context) => HomePageFirst(),
         '/login': (context) => LoginPage(),
         '/register': (context) => RegisterPage(),
-        '/home': (context) => MainHomePage(/*name: "Omar"*/),
+        '/home': (context) => MainHomePage(),
       },
     );
   }
