@@ -60,7 +60,9 @@ class RegisterPageState extends State<RegisterPage> {
     final response = await http.post(url,
         body: userInfoJSON, headers: {"Content-Type": "application/json"});
     final Map<String, dynamic> responseData = json.decode(response.body);
-
+    print(response.body);
+    print(response.statusCode);
+    print(url);
     if (response.statusCode == 200) {
       globals.setToken(responseData['token']);
 
@@ -85,6 +87,7 @@ class RegisterPageState extends State<RegisterPage> {
     } else {
       print("FAIL");
       print(response.body);
+
     }
   }
 
@@ -238,8 +241,10 @@ class RegisterPageState extends State<RegisterPage> {
                 color: _infoReady() ? _buttonColor : Colors.grey,
                 // onPressed: () => _infoReady() ? _getInfo() : _infoNotReady(),
                 onPressed: () {
+
                   if (_infoReady()) {
                     print(_getInfo());
+
                   } else {
                     _infoNotReady();
                   }
