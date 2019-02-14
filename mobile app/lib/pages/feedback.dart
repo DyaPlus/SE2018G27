@@ -3,6 +3,7 @@ import 'package:hms/myWidgets.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:hms/pages/mainHomePage.dart';
+import 'package:hms/globals.dart' as globals;
 
 class NewFeedback extends StatefulWidget {
   @override
@@ -18,7 +19,7 @@ class NewFeedBackState extends State<NewFeedback> {
     Map<String, String> enteredFeedback = {
       'feedback': '',
     };
-    String url = '';
+    var url = globals.domain+"users/feedback";
     var enteredFeedbackJSON = json.encode(enteredFeedback);
     http.post(url, body: enteredFeedbackJSON);
   }
