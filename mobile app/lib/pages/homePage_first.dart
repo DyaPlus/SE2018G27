@@ -1,8 +1,28 @@
 import 'package:flutter/material.dart';
 
 import '../myWidgets.dart';
+import 'mainHomePage.dart';
+import 'package:hms/globals.dart' as globals;
 
-class HomePageFirst extends StatelessWidget {
+class HomePageFirst extends StatefulWidget {
+  @override
+  HomePageFirstState createState() {
+    return HomePageFirstState();
+  }
+}
+
+class HomePageFirstState extends State<HomePageFirst> {
+  // void initState() {
+  //   super.initState();
+  //   globals.getToken();
+  //   if (globals.token != "" && globals.token != null) {
+  //     Navigator.pushReplacement(
+  //       context,
+  //       MaterialPageRoute(builder: (context) => MainHomePage()),
+  //     );
+  //   }
+  // }
+
   @override
   Widget build(BuildContext context) {
     return Page(

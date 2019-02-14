@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:hms/myWidgets.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:hms/globals.dart' as globals;
+
+import 'package:hms/pages/mainHomePage.dart';
 
 class RegisterPage extends StatefulWidget {
   @override
@@ -50,17 +52,36 @@ class RegisterPageState extends State<RegisterPage> {
   }
 
   Future<String> _getInfo() async {
-    var url = 'https://secret-lowlands-85631.herokuapp.com/users/signup/';
+    //var url = 'https://secret-lowlands-85631.herokuapp.com/users/signup/';
+    //print(userInfo);
+
+    var url = globals.domain + "users/signup/";
     var userInfoJSON = json.encode(userInfo);
     final response = await http.post(url,
         body: userInfoJSON, headers: {"Content-Type": "application/json"});
     final Map<String, dynamic> responseData = json.decode(response.body);
 
     if (response.statusCode == 200) {
-      print(response.body);
-      final SharedPreferences prefs = await SharedPreferences.getInstance();
-      prefs.setString('token', responseData['token']);
-      return response.body;
+      globals.setToken(responseData['token']);
+
+      return showDialog(
+        context: context,
+        builder: (BuildContext context) => AlertDialog(
+              title: Text("Registered successfully"),
+              content: Text(response.body),
+              actions: <Widget>[
+                FlatButton(
+                  child: Text("OK"),
+                  onPressed: () {
+                    Navigator.pushAndRemoveUntil(
+                        context,
+                        MaterialPageRoute(builder: (context) => MainHomePage()),
+                        (Route<dynamic> route) => false);
+                  },
+                ),
+              ],
+            ),
+      );
     } else {
       print("FAIL");
       print(response.body);

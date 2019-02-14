@@ -5,6 +5,8 @@ import '../myWidgets.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert' as convert;
 
+import 'package:hms/globals.dart' as globals;
+
 
 
 // class MainHomePage extends StatelessWidget {
@@ -41,6 +43,8 @@ String _address =   "please wait";
 String _name = "please wait" ;
 String _phone = "please wait" ;
 String _blood = "please wait" ;
+
+var url = globals.domain + "profile/";
 
   final nacontr = TextEditingController(text: "please wait") ;
   final adcontr = TextEditingController(text: "please wait") ;

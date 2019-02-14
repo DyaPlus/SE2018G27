@@ -5,6 +5,9 @@ import 'pages/myPrescriptionsPage.dart';
 import 'pages/myReports.dart';
 import 'pages/mainHomePage.dart';
 
+import 'package:hms/globals.dart' as globals;
+
+
 class Page extends StatelessWidget {
   Page({
     @required this.title,
@@ -109,8 +112,11 @@ class Page extends StatelessWidget {
                   ListTile(
                     leading: RotatedBox(
                         quarterTurns: 2, child: Icon(Icons.exit_to_app)),
-                    onTap: () => Navigator.pushNamedAndRemoveUntil(
-                        context, '/firstHome', (Route<dynamic> route) => false),
+                    onTap: () {
+                      globals.deleteToken();
+                      Navigator.pushNamedAndRemoveUntil(context, '/firstHome',
+                          (Route<dynamic> route) => false);
+                    },
                     title: Text("Logout"),
                   ),
                 ],
@@ -324,7 +330,7 @@ class MyBottomAppBar extends StatelessWidget {
 
 class MyDropDown extends StatefulWidget {
   final String title;
-  final List<String> items;
+  final List<dynamic> items;
   final Function(dynamic) onChanged;
 
   MyDropDown({
@@ -352,20 +358,19 @@ class MyDropDownState extends State<MyDropDown> {
           child: Text(widget.title, style: TextStyle(fontSize: 15.0)),
         ),
         DropdownButton(
-          value: _currentValue,
-          onChanged: (value) {
-            setState(() {
-              _currentValue = value;
-            });
-            widget.onChanged(value);
-          }, //widget.onChanged(value),
-          items: widget.items
-              .map((item) => DropdownMenuItem(
-                    value: item,
-                    child: Text(item),
-                  ))
-              .toList()
-        ),
+            value: _currentValue,
+            onChanged: (value) {
+              setState(() {
+                _currentValue = value;
+              });
+              widget.onChanged(value);
+            }, //widget.onChanged(value),
+            items: widget.items
+                .map((item) => DropdownMenuItem(
+                      value: item,
+                      child: Text(item),
+                    ))
+                .toList()),
       ],
     );
   }
