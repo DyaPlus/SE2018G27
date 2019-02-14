@@ -1,0 +1,73 @@
+
+<div class="container">
+<form action="/action_page.php">
+<div class="row">
+<div class="col-25">
+<label for="title">Analysis Title</label>
+</div>
+<div class="col-75">
+<input type="text" id="title" name="title" placeholder="Enter a title for the analysis">
+</div>
+</div>
+
+
+<div class="row">
+<div class="col-25">
+<label for="date">Date</label>
+</div>
+<div class="col-75">
+<input id="date" type="date" name="date">
+</div>
+</div>
+
+<div class="row">
+<div class="col-25">
+<label for="name">Patient name</label>
+</div>
+<div class="col-75">
+
+  <input type="text" id="name" list="Names" placeholder="Enter a Patient Name">
+  <datalist id="Names">
+      <option value="Abdullah Emad">
+      <option value="Abdelrahman El-Wali">
+      <option value="Abdullah Shaker">
+    </datalist>
+
+</div>
+</div>
+<div class="row">
+<div class="col-25">
+<label for="subject">Comment</label>
+</div>
+<div class="col-75">
+<textarea id="subject" name="subject" placeholder="Write a comment.." style="height:75px"></textarea>
+</div>
+</div>
+
+<div class="row">
+<div class="col-25">
+<label action="/action_page.php" for="file">Upload Analysis file</label>
+</div>
+<div class="col-75">
+<input type="file" id="file" name="file" >
+</div>
+</div>
+  
+
+
+<div class="row">
+<input type="submit" value="Submit"  style="margin-top: 20px; " >
+</div>
+
+
+
+</form>
+</div>
+
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
