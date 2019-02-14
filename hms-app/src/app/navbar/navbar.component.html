@@ -5,9 +5,13 @@
   </button>
   <div class="collapse navbar-collapse" id="navbarNavDropdown">
     <ul class="navbar-nav">
-      <li *ngIf=" (reg_or_not) && (doc_or_not) " class="nav-item active">
+      <li *ngIf=" (reg_or_not) && (doc_or_not) " class="nav-item">
         <a class="nav-link" routerLink="/Reports"> Make Reports <span class="sr-only">(current)</span></a>
       </li>
+      <li *ngIf=" (reg_or_not) && (doc_or_not) " class="nav-item ">
+        <a class="nav-link" routerLink="/Make_prescription"> Make Prescription <span class="sr-only">(current)</span></a>
+     </li>
+      
       <li class="nav-item">
         <a class="nav-link" routerLink="/HomePage">Home Page</a>
       </li>

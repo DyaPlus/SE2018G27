@@ -69,9 +69,27 @@ export class ProfileComponent implements OnInit {
 
   }
 
+  resvs:any
   get_reservations()
   {
+    console.log("hi")
+    this.http.get("http://127.0.0.1:8000/users/queryres/",this.httpOptions)
     
+    .subscribe(
+    data  => {
+      this.resvs=data
+      console.log(data)
+                  
+    },
+    
+    error  => {
+    
+    console.log("Error", error);
+    
+    }
+    
+    );
+
   }
 
 

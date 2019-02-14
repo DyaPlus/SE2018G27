@@ -1,0 +1,31 @@
+<form #f="ngForm" (ngSubmit)="submit(f)">
+  <div class="container">
+                  <br>
+
+                <div class="form-group">
+                  <label for="target">target</label>
+                  <input type="text" ngModel  name="target"  #target="ngModel" class="form-control" id="target" placeholder="Please add target">
+                </div>  
+
+                <div class="form-group">
+                  <label for="content">Title</label>
+                  <input type="text" ngModel  name="title"  #title="ngModel" class="form-control" id="title" placeholder="Please add title of report">
+                </div>
+                
+                <div class="form-group">
+                  <label for="title">Content:</label>
+                  <select class="form-control" ngModel #content="ngModel"   name="content" id="content">
+                    <option>E</option>
+                    <option>R</option>
+                    <option>A</option>
+                  </select>
+                </div>
+
+               
+
+                <button>Submit</button>
+                
+  </div>
+  
+</form>
+

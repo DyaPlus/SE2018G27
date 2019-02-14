@@ -1,4 +1,4 @@
-import { RouterModule, Routes } from '@angular/router';
+import { RouterModule, Routes, PreloadingStrategy } from '@angular/router';
 import { ModuleWithProviders } from "@angular/core";
 import { AnalysisComponent } from './analysis/analysis.component';
 import { ReportsComponent } from './reports/reports.component';
@@ -9,6 +9,7 @@ import { AboutusComponent } from './aboutus/aboutus.component';
 import { HomepageComponent } from './homepage/homepage.component';
 import { LoginComponent } from './login/login.component';
 import { ProfileComponent } from './profile/profile.component';
+import { PrescribtionComponent } from './prescribtion/prescribtion.component';
 
 
 const routes: Routes = [
@@ -20,7 +21,8 @@ const routes: Routes = [
     { path:'AboutUs',    component:AboutusComponent},
     { path:'HomePage',    component:HomepageComponent},
     { path:'Login',    component:LoginComponent},
-    {path:"Profile",component:ProfileComponent}
+    {path:"Profile",component:ProfileComponent},
+    {path:"Make_prescription",component:PrescribtionComponent}
 
 
 ];
