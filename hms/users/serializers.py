@@ -27,6 +27,11 @@ class ReportSerializer(serializers.ModelSerializer):
          model = Report
          fields=('__all__')
 
+class MedicineSerializer(serializers.ModelSerializer):
+     class Meta:
+         model = Medicine
+         fields=('__all__')
+
 class SlotSerializer(serializers.ModelSerializer):
     time = serializers.DateTimeField(format='%A %d-%m %I:%M %p')
     class Meta:

@@ -16,7 +16,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.core.exceptions import PermissionDenied
 from django.db import IntegrityError
 
-path_wkthmltopdf = r'C:\wkhtmltopdf\bin\wkhtmltopdf.exe'
+path_wkthmltopdf = r'/usr/bin/wkhtmltopdf'
 config = pdfkit.configuration(wkhtmltopdf=path_wkthmltopdf)
 
 def genPDF(target,title,content):
@@ -199,7 +199,7 @@ class GetReportPDF(APIView):
         return Response({"valid":False, "errors":serializer.errors},status=status.HTTP_400_BAD_REQUEST)
 
 class QuerySlot(APIView):
-    
+
     def get(self,request,doctorid):
         try:
             user=request.user
@@ -258,7 +258,7 @@ class QueryReservations(APIView):
 
 class QueryDoctors(APIView):
     permission_classes = (permissions.AllowAny,)
-    
+
     def get(self,request):
         Docs=[]
         #Docs = HMSProfile.objects.filter(type="D")
@@ -270,9 +270,9 @@ class QueryDoctors(APIView):
             #print("new iteration")
             if(profile.type == 'D'):
                 Docs.append(account)
-            
+
         serializer=UserSerializer(Docs,many=True)
-         
+
         return Response(serializer.data)
 
 class QueryUsers(APIView):
@@ -280,7 +280,7 @@ class QueryUsers(APIView):
     def get(self,request):
         all_users=User.objects.all()
         serializer=UserSerializer(all_users,many=True)
-         
+
         return Response(serializer.data)
 
 class what_is_my_ip(APIView):
@@ -290,5 +290,12 @@ class what_is_my_ip(APIView):
         id=user.id
         return Response({"id":id})
 
-
-
+class GetMedcines(APIView):
+    permission_classes = (permissions.AllowAny,)
+    def get(self,request,med):
+        user=request.user
+        medicines= Medicine.objects.filter(title__contains=med)
+        serializer = MedicineSerializer(medicines,many=True)
+        if not serializer.data:
+            return Response({"valid":False, "errors":'Medicine Not Available'},status=status.HTTP_400_BAD_REQUEST)
+        return Response(serializer.data)

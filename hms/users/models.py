@@ -63,7 +63,7 @@ class Slot(models.Model):
     def __str__(self):
         date = timezone.localtime(self.time)
         str_format = date.strftime("%A %d-%m %I:%M %p")
-        return str_format 
+        return str_format
 
 class Reservation(models.Model):
     slot=models.ForeignKey(Slot,on_delete=models.CASCADE)

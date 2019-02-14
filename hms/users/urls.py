@@ -15,7 +15,7 @@ urlpatterns = [
      url(r'^docs/$', QueryDoctors.as_view()),
      url(r'^lms/$', QueryUsers.as_view()),
      url(r'^what_ip/$', what_is_my_ip.as_view()),
-
+     path('medicine/<slug:med>',GetMedcines.as_view())
 
 
 ]
