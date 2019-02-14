@@ -4,6 +4,8 @@ import 'myReservationsPage.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
+import 'package:hms/globals.dart' as globals;
+
 class NewReservation extends StatefulWidget {
   @override
   NewReservationState createState() {
@@ -12,52 +14,55 @@ class NewReservation extends StatefulWidget {
 }
 
 class NewReservationState extends State<NewReservation> {
-  final String url = "";
-
   final Map<String, dynamic> newReservation = {
     'doctor': null,
-    'time': null,
-    'department': null,
+    'slot': null,
   };
 
-  List doctors = List();
+  List doctors = [
+    {'id': 0, 'username': " "},
+  ];
 
-  Future<String> getDoctors() async {
-    var res = await http.get(Uri.encodeFull(
-        "https://secret-lowlands-85631.herokuapp.com/users/docs/"));
+  Future getDoctors() async {
+    var res = await http.get(globals.domain + "users/docs/");
     var resBody = json.decode(res.body);
 
     setState(() {
       doctors = resBody;
     });
-
-    return "Sucess";
   }
 
-  // Future<String> getDoctors() async {
-  //   final response = await http
-  //       .get("https://secret-lowlands-85631.herokuapp.com/users/docs/");
+  Future querySlot() async {
 
-  //   if (response.statusCode == 200) {
-  //     setState(() {
-  //       doctors = json.decode(response.body);
-  //     });
-  //     return "SUCCESS";
-  //   } else {
-  //     throw Exception('Failed to load');
-  //   }
-  // }
+    var docId;
+    doctors.forEach((doc){
+      if (doc['username'] == newReservation['doctor']){
+        docId = doc['id'];
+      }
+    });
 
-  Future sendReservation() {
+    http.Response response = await http.get(
+      globals.domain + 'users/queryslot/$docId',
+      headers: globals.tokenHeader,
+    );
+    print(response.statusCode);
+    print(response.body);
+  }
+
+  Future sendReservation() async {
     print(newReservation);
-    //return http.post(url, body: json.encode(newReservation));
-    return http.post(url, body: newReservation);
+    http.Response response = await http.post(
+      globals.domain + 'users/reserveslot/',
+      headers: globals.tokenHeader,
+      body: newReservation,
+    );
+    print(globals.tokenHeader);
+    print(response.statusCode);
+    print(response.body);
   }
 
   void showAlert(BuildContext context) {
-    if (newReservation['doctor'] != null &&
-        newReservation['department'] != null &&
-        newReservation['time'] != null)
+    if (newReservation['doctor'] != null && newReservation['slot'] != null)
       showDialog(
           context: context,
           builder: (BuildContext context) => AlertDialog(
@@ -113,58 +118,15 @@ class NewReservationState extends State<NewReservation> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[
-            FutureBuilder(
-              future: getDoctors(),
-              initialData: doctors,
-              builder: (BuildContext context, AsyncSnapshot snapshot) {
-                switch (snapshot.connectionState) {
-                  case ConnectionState.none:
-                    return Text('Press button to start.');
-                  case ConnectionState.active:
-                  case ConnectionState.waiting:
-                    return Center(child: CircularProgressIndicator());
-                  case ConnectionState.done:
-                    if (snapshot.hasError)
-                      return Text('Error: ${snapshot.error}');
-                    return Text('Result: ${snapshot.data}');
-                }
-                return null;
-
-                if (snapshot.hasData) {
-                  print(snapshot.data);
-                  return MyDropDown(
-                    title: "Doctor",
-                    onChanged: (value) => newReservation['doctor'] = value,
-                    items: [],
-                  );
-                } else if (snapshot.hasError) {
-                  return Text("${snapshot.error}");
-                } else {
-                  return Container();
-                }
-              },
+            MyDropDown(
+              title: "Doctors",
+              items: doctors.map((doctor) => doctor['username']).toList(),
+              onChanged: (value) => newReservation['doctor'] = value,
             ),
-            // DropdownButton(
-            //     onChanged: (value) {
-            //       print(doctors);
-            //       print(value);
-            //     },
-            //     items: doctors
-            //         .map((item) => DropdownMenuItem(
-            //               value: item['name'],
-            //               child: Text('name'),
-            //             ))
-            //         .toList()),
-            // MyDropDown(
-            //   title: "Doctor",
-            //   onChanged: (value) => newReservation['doctor'] = value,
-            //   items: doctors,
-            //),
             MyRoundedButton(
-              text: "Select Date and time",
+              text: "Select slot",
               onPressed: () async {
-                print(newReservation['time']);
-                newReservation['time'] = await showDatePicker(
+                newReservation['slot'] = await showDatePicker(
                   context: context,
                   firstDate: DateTime.now(),
                   lastDate: DateTime(2020),
@@ -175,8 +137,11 @@ class NewReservationState extends State<NewReservation> {
                   context: context,
                   initialTime: TimeOfDay.now(),
                 );
-                newReservation['time'] = newReservation['time']
+                newReservation['slot'] = newReservation['slot']
                     .add(Duration(hours: time.hour, minutes: time.minute));
+
+                newReservation['slot'] = newReservation['slot'].toString();
+                querySlot();
               },
             ),
           ],

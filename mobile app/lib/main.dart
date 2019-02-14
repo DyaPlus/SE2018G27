@@ -28,7 +28,6 @@ class _HMSAppState extends State<HMSApp> {
 
   @override
   Widget build(BuildContext context) {
-    print(globals.token.length);
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: (globals.token.length == 0) ? HomePageFirst() : MainHomePage(),

@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:intl/intl.dart';
 
 import 'package:hms/myWidgets.dart';
 import 'newReservationPage.dart';
 import 'appointmentDetails.dart';
-import 'package:intl/intl.dart';
+import 'package:hms/globals.dart' as globals;
 
 class MyReservations extends StatefulWidget {
   @override
@@ -16,15 +17,21 @@ class MyReservations extends StatefulWidget {
 
 class MyReservationsState extends State<MyReservations> {
   final DateFormat formatter = DateFormat('yyyy-MM-dd');
+  List reservations = [];
 
   Future getReservations() async {
-    final response =
-        await http.get("https://jsonplaceholder.typicode.com/users/");
+    var res = await http.get(
+      globals.domain + "users/queryres/",
+      headers: globals.tokenHeader,
+    );
 
-    if (response.statusCode == 200) {
-      return json.decode(response.body);
-    } else {
-      throw Exception('Failed to load');
+    var resBody = json.decode(res.body);
+    print(res.statusCode);
+    print(resBody);
+    if (res.statusCode == 200) {
+      setState(() {
+        reservations = resBody;
+      });
     }
   }
 
@@ -62,8 +69,7 @@ class MyReservationsState extends State<MyReservations> {
           } else if (snapshot.hasError) {
             return Text("${snapshot.error}");
           }
-
-          return Center(child: CircularProgressIndicator());
+          return Center(child: Text("No reservations")/*CircularProgressIndicator()*/);
         },
       ),
       /*

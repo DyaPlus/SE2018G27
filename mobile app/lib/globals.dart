@@ -7,14 +7,11 @@ String domain = "http://192.168.1.104:8000/";
 
 String token = "";
 SharedPreferences prefs;
-var tokenHeader = json.encode("'Authentication':'Token " + token);
+Map<String, String> tokenHeader = {'Authorization': 'Token $token'};
 
 Future setToken(String t) async {
-  //prefs = await SharedPreferences.getInstance();
   token = t;
   await prefs.setString('token', token);
-  print("setToken " + token);
-  print(token.length);
 }
 
 Future getToken() async {
@@ -22,14 +19,9 @@ Future getToken() async {
   if (token == null) {
     token = "";
   }
-  print("getToken $token");
-  print(token.length);
 }
 
 Future deleteToken() async {
-  //prefs = await SharedPreferences.getInstance();
   await prefs.remove('token');
   token = "";
-  print("deleteToken " + token);
-  print(token.length);
 }

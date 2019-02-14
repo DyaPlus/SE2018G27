@@ -330,7 +330,7 @@ class MyBottomAppBar extends StatelessWidget {
 
 class MyDropDown extends StatefulWidget {
   final String title;
-  final List<String> items;
+  final List<dynamic> items;
   final Function(dynamic) onChanged;
 
   MyDropDown({
