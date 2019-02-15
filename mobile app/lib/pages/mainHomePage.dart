@@ -174,6 +174,7 @@ http.post(url, body: {"name" :nacontr.text , "birth" : _DOB , "type": typecontr.
                     Flexible(
                       child: Material(
                         child: TextFormField(
+                           enabled: false,
                            onEditingComplete: ()=> _save() ,
                           textInputAction: TextInputAction.done,
                          controller: nacontr,
@@ -218,10 +219,10 @@ http.post(url, body: {"name" :nacontr.text , "birth" : _DOB , "type": typecontr.
                         )
                         ,
                       ),
-                      onTap: () => _changeDOB(),
+                    //  onTap: () => _changeDOB(),
                     )),
                   ),
-              Flexible(
+       /*       Flexible(
                 child: Container ( 
                 color: Colors.green ,
         height: 50,
@@ -231,7 +232,7 @@ http.post(url, body: {"name" :nacontr.text , "birth" : _DOB , "type": typecontr.
                 ) 
                 
                 ),
-              )
+              ) */
                 ],
               ),
             ),
@@ -259,6 +260,7 @@ Padding(
                     Flexible(
                       child: Material(
                         child: TextFormField(
+                           enabled: false,
                           controller: idcontr,
                           textInputAction: TextInputAction.done,
                         
@@ -293,6 +295,7 @@ Padding(
                     Flexible(
                       child: Material(
                         child: TextFormField(
+                           enabled: false,
                           controller: phcontr,
                           textInputAction: TextInputAction.done,
                         
@@ -327,6 +330,7 @@ Padding(
                     Flexible(
                       child: Material(
                         child: TextFormField(
+                           enabled: false,
                           controller: typecontr,
                           textInputAction: TextInputAction.done,
                         
