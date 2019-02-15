@@ -1,3 +1,33 @@
+<form #q="ngForm" (ngSubmit)="searching(q)">
+  <div class="container">
+                  <br>
+                <div class="form-group">
+                  <label for="target">Search For medicine</label>
+                  <input type="text" ngModel  name="medicine"  #medicine="ngModel" class="form-control" id="medicine" placeholder="The medicine you are looking for is..?">
+                </div>  
+                <button class="btn btn-warning" >Search for it</button>
+                
+  </div>
+  
+  
+</form>
+
+<div *ngIf="clicked"> 
+  <div *ngIf="found">
+    <div class="container">
+        <button  style="align-self: center" (click)="add_med()" type="button" class="btn btn-success">Add to prescribtion?</button>
+    </div>
+  </div>
+
+  <div *ngIf="!found" style="text-align:center">
+    <span style="color:red;font-size:bold">     not found.     
+       </span>
+  </div>
+  
+
+</div>
+
+
 <form #f="ngForm" (ngSubmit)="submit(f)">
   <div class="container">
                   <br>
@@ -6,26 +36,20 @@
                   <label for="target">target</label>
                   <input type="text" ngModel  name="target"  #target="ngModel" class="form-control" id="target" placeholder="Please add target">
                 </div>  
-
-                <div class="form-group">
-                  <label for="content">Title</label>
-                  <input type="text" ngModel  name="title"  #title="ngModel" class="form-control" id="title" placeholder="Please add title of report">
-                </div>
+             
                 
-                <div class="form-group">
-                  <label for="title">Content:</label>
-                  <select class="form-control" ngModel #content="ngModel"   name="content" id="content">
-                    <option>E</option>
-                    <option>R</option>
-                    <option>A</option>
-                  </select>
-                </div>
-
                
 
                 <button>Submit</button>
                 
   </div>
   
+  
 </form>
 
+<div *ngIf="ahmed == 1">
+    <a style="align-self:center" [href]="killme()"  title="title" download>
+      download
+    </a>
+  
+  </div>

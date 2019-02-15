@@ -1,0 +1,21 @@
+<form #q="ngForm" (ngSubmit)="submit(q)">
+  <div class="container">
+                  <br>
+                <div class="form-group">
+                  <label for="title"> title </label>
+                  <input type="text" ngModel  name="title"  #title="ngModel" class="form-control" id="title" placeholder="title..?">
+                </div>  
+
+                <div class="form-group">
+                  <label for="content"> content </label>
+                  <input type="text" ngModel  name="content"  #content="ngModel" class="form-control" id="content" placeholder="content..?">
+                </div>  
+
+
+
+                <button class="btn btn-warning" >submit</button>
+                
+  </div>
+  
+  
+</form>

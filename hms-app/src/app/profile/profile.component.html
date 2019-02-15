@@ -49,13 +49,19 @@
   <div class="col">
 
   </div>
-  <div class="col">
+  <div  *ngIf="info.type=='P' " class="col">
       <button  (click)="get_reservations()" type="button" data-toggle="modal" data-target="#Reservations" class="btn btn-dark">Reservations</button>
   </div>
 
-  <div class="col">
+  <div  *ngIf="info.type=='P' " class="col">
       <button (click)="get_reports()" type="button" data-toggle="modal" data-target="#Reports" class="btn btn-dark">Reports</button>
   </div>
+
+  
+  <div  *ngIf="info.type=='D' " class="col">
+      <button (click)="get_reports()" type="button" data-toggle="modal" data-target="#Reports" class="btn btn-dark"> Forwarded Reports</button>
+  </div>
+
 </div>
 
 

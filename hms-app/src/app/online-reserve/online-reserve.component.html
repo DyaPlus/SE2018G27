@@ -1,28 +1,42 @@
  <div *ngIf="changer == 0">
-  <div *ngFor="let doc of docs; let i = index"  >
-    <div class="card" style="width: 18rem;">
-        <div class="card-body">
-          <h5 class="card-title" style="color:black ">{{doc.username}}</h5>
-          <p class="card-text">{{doc.id}}</p>
-          <a (click)="submit(doc.id)" class="btn btn-primary">Select this doc</a>
+   <div class="row">
+      <div *ngFor="let doc of docs; let i = index"  >
+        <div class="col">
+            <div class="card" style="width: 18rem;">
+                <div class="card-body">
+                  <h5 class="card-title" style="color:black ">{{doc.username}}</h5>
+                  <p class="card-text">{{doc.id}}</p>
+                  <a (click)="submit(doc.id)" class="btn btn-primary">Select this doc</a>
+                </div>
+              </div>
+              <br>
+          </div>
         </div>
-      </div>
-      <br>
-  </div>
+   </div>
+  
 </div>
 
 
 <div *ngIf="changer == 1">
   <h4> please select the prefered slot</h4>
-  <div *ngFor="let slot of slots; let i = index"  >
-    <div class="card" style="width: 18rem;">
-        <div class="card-body">
-          <h5 class="card-title" style="color:black ">{{slot.id}}</h5>
-          <p class="card-text">{{slot.time}}</p>
-          <a (click)="reserve_slot(slot.id)" class="btn btn-primary">Select this slot</a>
+  <div *ngIf="error" style="text-align:center; color:red;font-size:bolder">
+      no slots are available
+      <button routerLink="/HomePage">
+          Go to home page
+      </button>
+  </div>
+  <div *ngIf="!error">
+      <div *ngFor="let slot of slots; let i = index"  >
+          <div class="card" style="width: 18rem;">
+              <div class="card-body">
+                <h5 class="card-title" style="color:black ">{{slot.id}}</h5>
+                <p class="card-text">{{slot.time}}</p>
+                <a (click)="reserve_slot(slot.id)" class="btn btn-primary">Select this slot</a>
+              </div>
+            </div>
+            <br>
         </div>
-      </div>
-      <br>
+        
   </div>
   
 

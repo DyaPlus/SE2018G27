@@ -16,7 +16,9 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.core.exceptions import PermissionDenied
 from django.db import IntegrityError
 
-path_wkthmltopdf = r'/usr/bin/wkhtmltopdf'
+#path_wkthmltopdf = r'/usr/bin/wkhtmltopdf'
+path_wkthmltopdf = r'C:\wkhtmltopdf\bin\wkhtmltopdf.exe'
+    
 config = pdfkit.configuration(wkhtmltopdf=path_wkthmltopdf)
 
 def genPDF(target,title,content):
@@ -282,6 +284,24 @@ class QueryUsers(APIView):
         serializer=UserSerializer(all_users,many=True)
 
         return Response(serializer.data)
+
+class Submit_Feedback(APIView):
+    def post(self,request):
+        user=request.user
+        serializer = FeedbackSerializer(data=request.data)
+        if serializer.is_valid():
+            feedback=Feedback.objects.create(title=serializer.data['title'], content=serializer.data['content'], maker=user)
+            
+            return Response(serializer.data)
+
+        else:
+            return Response({"valid": False,'error' : 'Wrong data'}, status=status.HTTP_400_BAD_REQUEST)
+
+
+
+
+
+
 
 class what_is_my_ip(APIView):
     #permission_classes = (permissions.AllowAny,)

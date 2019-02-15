@@ -18,6 +18,10 @@
       <li *ngIf=" !(reg_or_not)" class="nav-item">
         <a class="nav-link" routerLink="/SignUp">Sign up</a>
       </li>
+      <li *ngIf=" (reg_or_not)" class="nav-item">
+        <a class="nav-link" routerLink="/Feedback">Feedback</a>
+      </li>
+      
       <li *ngIf=" (reg_or_not) && !(doc_or_not) " class="nav-item">
         <a class="nav-link" routerLink="/OnlineReservations"> Make Online Reservations</a>
       </li>

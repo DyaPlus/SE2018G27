@@ -6,6 +6,11 @@ from django.core.validators import RegexValidator
 from django.utils import timezone
 
 
+class FeedbackSerializer(serializers.ModelSerializer):
+    class Meta:
+         model = Feedback
+         fields=('__all__')
+
 class MobileValidator(RegexValidator):
      regex = r'^01[0125]\d{8}'
      message = 'Not a Valid Mobile Number'

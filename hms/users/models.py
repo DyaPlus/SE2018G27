@@ -15,6 +15,14 @@ REPORT_TYPE=(
 )
 
 
+
+class Feedback(models.Model):
+    title=models.CharField(max_length=20)
+    content=models.CharField(max_length=500)
+    maker=models.ForeignKey(User, on_delete=models.CASCADE,null=True)
+
+
+
 class HMSProfile(models.Model):
     user=models.OneToOneField(User, on_delete=models.CASCADE,related_name="profile",null=True)
     full_name=models.CharField(max_length=30,unique=True)

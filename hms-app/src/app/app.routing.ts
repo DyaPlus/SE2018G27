@@ -10,6 +10,7 @@ import { HomepageComponent } from './homepage/homepage.component';
 import { LoginComponent } from './login/login.component';
 import { ProfileComponent } from './profile/profile.component';
 import { PrescribtionComponent } from './prescribtion/prescribtion.component';
+import { FeedbackComponent } from './feedback/feedback.component';
 
 
 const routes: Routes = [
@@ -22,7 +23,9 @@ const routes: Routes = [
     { path:'HomePage',    component:HomepageComponent},
     { path:'Login',    component:LoginComponent},
     {path:"Profile",component:ProfileComponent},
-    {path:"Make_prescription",component:PrescribtionComponent}
+    {path:"Make_prescription",component:PrescribtionComponent},
+    {path:"Feedback",component:FeedbackComponent}
+
 
 
 ];

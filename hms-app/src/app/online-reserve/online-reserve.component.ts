@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpHeaders } from '@angular/common/http';
 import { HttpClient } from '@angular/common/http';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-online-reserve',
@@ -9,7 +10,7 @@ import { HttpClient } from '@angular/common/http';
 })
 export class OnlineReserveComponent implements OnInit {
 
-  constructor(public http: HttpClient) { }
+  constructor(public http: HttpClient,public router:Router) { }
 
   docs:any
 
@@ -49,6 +50,7 @@ export class OnlineReserveComponent implements OnInit {
   slots:any
   selected_doc:any 
   selected_slot:any
+  error=false
 
   submit(params:any)
   {
@@ -61,12 +63,12 @@ export class OnlineReserveComponent implements OnInit {
     data  => {
       //console.log(data)
       this.slots=data
+      this.error=false
                   
     },
     
     error  => {
-    
-    console.log("Error", error);
+    this.error=true
     
     }
     
@@ -86,9 +88,10 @@ export class OnlineReserveComponent implements OnInit {
     
     .subscribe(
     data  => {
-      console.log(data)
-    
-    console.log(data)
+     // console.log(data)
+     this.router.navigateByUrl("/HomePage")
+
+    //console.log(data)
     },
     
     error  => {

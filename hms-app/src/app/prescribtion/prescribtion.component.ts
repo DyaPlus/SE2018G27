@@ -14,13 +14,53 @@ export class PrescribtionComponent implements OnInit {
 
   ngOnInit() {
   }
+  medicine:any
   target:any
   content:any
   title:any
   url_1:any
   blob_1:any
+  found:boolean
+  clicked:boolean
   //ahmed=0;
+  arr=[]
 
+  add_med()
+  {
+    this.arr.push(this.medicine)
+  }
+
+  searching(params:any)
+  { 
+    this.found=false
+    this.clicked=false
+    var currentUser = JSON.parse(localStorage.getItem('currentUser'));
+    var token = currentUser.token; // your token
+    var tok=token
+   const httpOptions = {
+    headers: new HttpHeaders({
+      'Authorization': "Token"+" "+tok
+    })
+                      };
+    this.medicine=params.value["medicine"]
+    this.http.get("http://127.0.0.1:8000/users/medicine/"+this.medicine+"",
+    httpOptions)
+    
+    .subscribe(
+    data  => {
+    this.found=true
+    this.clicked=true
+    },
+    error  => {
+    this.found=false
+    this.clicked=true
+    
+    }
+    
+    )
+  
+  }
+  ahmed=0
   killme()
   {
     return this.url_1
@@ -39,15 +79,16 @@ export class PrescribtionComponent implements OnInit {
 
 
     this.target=params.value["target"];
-    this.content=params.value["content"];
-    this.title=params.value["title"];
+    
+    //this.content=params.value["content"];
+    //this.title=params.value["title"];
     
 
     this.http.post("http://127.0.0.1:8000/users/genreport/",
     {
     "target":  this.target,
-    "content":  this.content,
-    "title":  this.title,
+    "content":  this.arr.join(),
+    "title":  'E',
     },{responseType: 'arraybuffer',headers:httpOptions.headers})
     
     .subscribe(
@@ -61,7 +102,7 @@ export class PrescribtionComponent implements OnInit {
     var file = new Blob([data], {type: 'application/pdf'});
     var fileURL = URL.createObjectURL(file);
     this.url_1=this.sanitizer.bypassSecurityTrustResourceUrl(fileURL)
-
+    this.ahmed=1
     
     
     

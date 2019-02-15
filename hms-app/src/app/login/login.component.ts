@@ -15,7 +15,9 @@ export class LoginComponent implements OnInit {
 
   username:any
   password:any
-  
+  error=false
+  errors:any
+
   submit(params:any) 
   {
     
@@ -31,13 +33,16 @@ export class LoginComponent implements OnInit {
     })
     .subscribe(
     data  => {
+    this.error=false
     console.log("POST Request is successful ", data);
     localStorage.setItem('currentUser', JSON.stringify({ token: data['token'], type: data['user_type'] }));
     this.router.navigateByUrl("/HomePage")
+
     },
     
     error  => {
-    
+    this.errors=error
+    this.error=true
     console.log("Error", error);
     
     }

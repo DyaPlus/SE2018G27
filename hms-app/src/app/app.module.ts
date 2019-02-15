@@ -20,6 +20,7 @@ import { AboutusComponent } from './aboutus/aboutus.component';
 import { ProfileComponent } from './profile/profile.component';
 import { FooterComponent } from './footer/footer.component';
 import { PrescribtionComponent } from './prescribtion/prescribtion.component';
+import { FeedbackComponent } from './feedback/feedback.component';
 
 @NgModule({
   declarations: [
@@ -35,7 +36,8 @@ import { PrescribtionComponent } from './prescribtion/prescribtion.component';
     AboutusComponent,
     ProfileComponent,
     FooterComponent,
-    PrescribtionComponent
+    PrescribtionComponent,
+    FeedbackComponent
   ],
   imports: [
     BrowserModule,
