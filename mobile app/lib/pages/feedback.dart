@@ -14,18 +14,22 @@ class NewFeedback extends StatefulWidget {
 
 class NewFeedBackState extends State<NewFeedback> {
   String feedback = "";
+  String title = "";
+  Map<String, String> enteredFeedback = {
+    'content': '',
+    'title':'',
+  };
 
   void sendFeedback() {
-    Map<String, String> enteredFeedback = {
-      'feedback': '',
-    };
-    var url = globals.domain+"users/feedback";
+    enteredFeedback['content'] = feedback;
+    enteredFeedback['title'] = title;
+    var url = globals.domain+"users/submit_feedback/";
     var enteredFeedbackJSON = json.encode(enteredFeedback);
     http.post(url, body: enteredFeedbackJSON);
   }
 
   void showAlert(BuildContext context) {
-    if (feedback != "")
+    if (feedback != "" && title != "")
       showDialog(
           context: context,
           builder: (BuildContext context) => AlertDialog(
@@ -54,7 +58,7 @@ class NewFeedBackState extends State<NewFeedback> {
         context: context,
         builder: (BuildContext context) => AlertDialog(
               title: Text("Error"),
-              content: Text("Feedback can't be empty"),
+              content: Text("Feedback and title can't be empty"),
               actions: <Widget>[
                 FlatButton(
                   child: Text('OK'),
@@ -75,6 +79,16 @@ class NewFeedBackState extends State<NewFeedback> {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[
             Input(
+              text: "title",
+              onChanged: (value) {
+                setState(() {
+                  title = value;
+                });
+                print(title);
+              },
+              // onChanged: (value) => widget.feedback = value,
+            ),
+            Input(
               text: "Write your feedback",
               onChanged: (value) {
                 setState(() {
@@ -84,6 +98,7 @@ class NewFeedBackState extends State<NewFeedback> {
               },
               // onChanged: (value) => widget.feedback = value,
             ),
+
           ],
         ),
       ),
