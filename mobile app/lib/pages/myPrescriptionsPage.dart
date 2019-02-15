@@ -1,10 +1,12 @@
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-
+import 'package:webview_flutter/webview_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:hms/myWidgets.dart';
 import 'prescriptionDetails.dart';
 import 'package:hms/globals.dart' as globals;
+
+import 'package:flutter_pdf_viewer/flutter_pdf_viewer.dart';
 
 class MyPrescriptions extends StatefulWidget {
   @override
@@ -18,7 +20,7 @@ class MyPrescriptionsState extends State<MyPrescriptions> {
 
   Future getPresctiptions() async {
     var res = await http.get(
-      globals.domain + "users/queryres/",
+      globals.domain + "users/getreportpdf/",
       headers: globals.tokenHeader,
     );
 
@@ -41,7 +43,13 @@ class MyPrescriptionsState extends State<MyPrescriptions> {
         future: getPresctiptions(),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            return ListView.builder(
+         
+          return  WebView(
+                                  initialUrl:Uri.dataFromString(snapshot.data, mimeType: 'text/html', encoding: Encoding.getByName("UTF-8")).toString(), // maybe you Uri.dataFromString(snapshot.data, mimeType: 'text/html', encoding: Encoding.getByName("UTF-8")).toString()
+                                  javascriptMode: JavascriptMode.unrestricted,
+                                );
+         
+         /*   return ListView.builder(
               itemCount: snapshot.data.length,
               itemBuilder: (BuildContext context, int i) => MyCard(
                     title: Text("${snapshot.data[i]['name']}"),
@@ -51,7 +59,7 @@ class MyPrescriptionsState extends State<MyPrescriptions> {
                         builder: (context) =>
                             PrescriptionDetailsPage(snapshot.data[i]))),
                   ),
-            );
+            ); */
           } else if (snapshot.hasError) {
             return Text("${snapshot.error}");
           }
