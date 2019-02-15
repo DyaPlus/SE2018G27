@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:hms/myWidgets.dart';
 import 'prescriptionDetails.dart';
+import 'package:hms/globals.dart' as globals;
 
 class MyPrescriptions extends StatefulWidget {
   @override
@@ -16,13 +17,18 @@ class MyPrescriptionsState extends State<MyPrescriptions> {
   List<Map<String, dynamic>> myPrescriptions = [];
 
   Future getPresctiptions() async {
-    final response =
-        await http.get("https://jsonplaceholder.typicode.com/users/");
+    var res = await http.get(
+      globals.domain + "users/queryres/",
+      headers: globals.tokenHeader,
+    );
 
-    if (response.statusCode == 200) {
-      return json.decode(response.body);
-    } else {
-      throw Exception('Failed to load');
+    var resBody = json.decode(res.body);
+    print(res.statusCode);
+    print(resBody);
+    if (res.statusCode == 200) {
+      setState(() {
+        myPrescriptions = resBody;
+      });
     }
   }
 

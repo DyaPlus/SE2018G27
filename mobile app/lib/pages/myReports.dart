@@ -7,6 +7,7 @@ import 'package:hms/myWidgets.dart';
 import 'newReservationPage.dart';
 import 'appointmentDetails.dart';
 import 'package:intl/intl.dart';
+import 'package:hms/globals.dart' as globals;
 
 class MyReports extends StatefulWidget {
   @override
@@ -17,15 +18,20 @@ class MyReports extends StatefulWidget {
 
 class MyReportsState extends State<MyReports> {
   final DateFormat formatter = DateFormat('yyyy-MM-dd');
-
+  List<Map<String, dynamic>> myReports = [];
   Future getReports() async {
-    final response =
-    await http.get("https://jsonplaceholder.typicode.com/users/");
+    var res = await http.get(
+      globals.domain + "users/queryres/",
+      headers: globals.tokenHeader,
+    );
 
-    if (response.statusCode == 200) {
-      return json.decode(response.body);
-    } else {
-      throw Exception('Failed to load');
+    var resBody = json.decode(res.body);
+    print(res.statusCode);
+    print(resBody);
+    if (res.statusCode == 200) {
+      setState(() {
+        myReports = resBody;
+      });
     }
   }
 
