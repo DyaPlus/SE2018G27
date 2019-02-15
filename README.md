@@ -5,7 +5,7 @@
 
 ## Documents
 * [**White Paper**](https://github.com/DyaPlus/SE2018G27/blob/master/HMS%20White%20Paper.pdf) – The White Paper .
-* [**BRD**]https://github.com/DyaPlus/SE2018G27/blob/master/HMS%20BRD.pdf) – The Bussiness Requirments Description for our system 
+* [**BRD**](https://github.com/DyaPlus/SE2018G27/blob/master/HMS%20BRD.pdf) – The Bussiness Requirments Description for our system 
 * [**SRS**](https://github.com/DyaPlus/SE2018G27/blob/master/HMS%20SRS.pdf) – The Software Requirments Specification for our System
 
 ## Development
