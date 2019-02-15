@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import 'package:intl/intl.dart';
 
 import 'package:hms/myWidgets.dart';
 import 'newReservationPage.dart';
@@ -16,7 +15,6 @@ class MyReservations extends StatefulWidget {
 }
 
 class MyReservationsState extends State<MyReservations> {
-  final DateFormat formatter = DateFormat('yyyy-MM-dd');
   List reservations = [];
 
   Future getReservations() async {
@@ -26,12 +24,9 @@ class MyReservationsState extends State<MyReservations> {
     );
 
     var resBody = json.decode(res.body);
-    print(res.statusCode);
-    print(resBody);
+
     if (res.statusCode == 200) {
-      setState(() {
-        reservations = resBody;
-      });
+      reservations = resBody;
     }
   }
 
@@ -41,10 +36,10 @@ class MyReservationsState extends State<MyReservations> {
       title: "My Reservations",
       hasDrawer: true,
       floatingActionButton: FloatingActionButton(
-        onPressed: () => Navigator.pushAndRemoveUntil(
-            context,
-            MaterialPageRoute(builder: (context) => NewReservation()),
-            (Route<dynamic> route) => false),
+        onPressed: () => Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => NewReservation()),
+            ),
         child: Icon(
           Icons.add,
           color: Colors.white,
@@ -52,7 +47,13 @@ class MyReservationsState extends State<MyReservations> {
       ),
       body: FutureBuilder(
         future: getReservations(),
-        builder: (context, snapshot) {
+        builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+          //print(snapshot);
+
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(child: CircularProgressIndicator());
+          }
+
           if (snapshot.hasData) {
             return ListView.builder(
               itemCount: snapshot.data.length,
@@ -69,7 +70,8 @@ class MyReservationsState extends State<MyReservations> {
           } else if (snapshot.hasError) {
             return Text("${snapshot.error}");
           }
-          return Center(child: Text("No reservations")/*CircularProgressIndicator()*/);
+          return Center(
+              child: Text("No reservations") /*CircularProgressIndicator()*/);
         },
       ),
       /*
