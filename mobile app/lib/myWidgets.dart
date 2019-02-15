@@ -7,7 +7,6 @@ import 'pages/mainHomePage.dart';
 
 import 'package:hms/globals.dart' as globals;
 
-
 class Page extends StatelessWidget {
   Page({
     @required this.title,
@@ -138,14 +137,12 @@ class MyCard extends StatelessWidget {
   final Text title;
   final Text subtitle;
   final Function onTap;
-  final Function delete;
 
   MyCard({
     @required this.title,
     @required this.subtitle,
     @required this.icon,
     @required this.onTap,
-    @required this.delete,
   });
 
   @override
@@ -163,33 +160,6 @@ class MyCard extends StatelessWidget {
               title: title,
               subtitle: subtitle,
             ),
-            ButtonTheme.bar(
-              child: ButtonBar(
-                children: <Widget>[
-                  RaisedButton(
-                    color: Colors.red,
-                    child: Row(
-                      children: <Widget>[
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Icon(
-                            Icons.cancel,
-                            color: Colors.white,
-                          ),
-                        ),
-                        Center(
-                          child: Text(
-                            "DELETE",
-                            style: TextStyle(color: Colors.white),
-                          ),
-                        ),
-                      ],
-                    ),
-                    onPressed: delete,
-                  )
-                ],
-              ),
-            )
           ],
         ),
       ),
@@ -346,7 +316,7 @@ class MyDropDown extends StatefulWidget {
 }
 
 class MyDropDownState extends State<MyDropDown> {
-  String _currentValue; //= widget.items[0];
+  String _currentValue;
 
   @override
   Widget build(BuildContext context) {

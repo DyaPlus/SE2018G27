@@ -17,15 +17,18 @@ class NewFeedBackState extends State<NewFeedback> {
   String title = "";
   Map<String, String> enteredFeedback = {
     'content': '',
-    'title':'',
+    'title': '',
   };
 
-  void sendFeedback() {
+  Future sendFeedback() async {
     enteredFeedback['content'] = feedback;
     enteredFeedback['title'] = title;
-    var url = globals.domain+"users/submit_feedback/";
+    var url = globals.domain + "users/submit_feedback/";
     var enteredFeedbackJSON = json.encode(enteredFeedback);
-    http.post(url, body: enteredFeedbackJSON);
+    http.Response response = await http.post(url,
+        body: enteredFeedbackJSON, headers: globals.tokenHeader);
+    print(response.statusCode);
+    print(response.body);
   }
 
   void showAlert(BuildContext context) {
@@ -98,7 +101,6 @@ class NewFeedBackState extends State<NewFeedback> {
               },
               // onChanged: (value) => widget.feedback = value,
             ),
-
           ],
         ),
       ),

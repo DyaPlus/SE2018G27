@@ -1,6 +1,5 @@
 library hms.globals;
 
-import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 
 String domain = "https://secret-lowlands-85631.herokuapp.com/";
