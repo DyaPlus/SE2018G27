@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 
 import 'dart:async';
@@ -39,24 +41,26 @@ class _MainHomePageState extends State<MainHomePage> {
 
 ////////////////variables////////////
 DateTime _DOB = DateTime.now();
-String _address =   "please wait";
+String _id =   "please wait";
 String _name = "please wait" ;
 String _phone = "please wait" ;
-String _blood = "please wait" ;
+String _type = "please wait" ;
 
-var url = globals.domain + "profile/";
-
+var url = globals.domain + "users/profile/";
+List data = [];
   final nacontr = TextEditingController(text: "please wait") ;
-  final adcontr = TextEditingController(text: "please wait") ;
+  final idcontr = TextEditingController(text: "please wait") ;
   final phcontr = TextEditingController(text: "please wait") ;
-  final blcontr = TextEditingController(text: "please wait") ;
+  final typecontr = TextEditingController(text: "please wait") ;
 
  /////////////////functions /////////////////////
- httpget(String url , String field) async{
-var a = await  http.get(url);
-var b = convert.jsonDecode(a.body) ;
-return b[field] ;
-}
+// httpget(String url , String field) async{
+//var a = await  http.get(url);
+//var b = convert.jsonDecode(a.body) ;
+//print(b);
+//print(url);
+//return b[field] ;
+//}
 
 
 
@@ -64,18 +68,26 @@ return b[field] ;
 
 
 initial () async{
+  var res = await http.get(
+    url,
+    headers: globals.tokenHeader,
+  );
 
-_address = await httpget("https://jsonplaceholder.typicode.com/todos/1", "title"); 
-adcontr.text =await _address ;
+  var resBody = json.decode(res.body);
+  print(res.statusCode);
+  print(resBody);
+int t = await resBody['id'];
+_id = "$t";
+idcontr.text = _id ;
 
-_name = await httpget("https://jsonplaceholder.typicode.com/todos/2", "title"); 
-nacontr.text =await _name ;
+_name = await resBody['full_name'];
+nacontr.text = _name;
 
-_phone = await httpget("https://jsonplaceholder.typicode.com/todos/3", "title"); 
-phcontr.text =await _phone ;
+_phone = await (resBody['mobile']);
+phcontr.text =_phone ;
 
-_blood = await httpget("https://jsonplaceholder.typicode.com/todos/2", "title"); 
-blcontr.text =await _blood ;
+_type = await resBody['type'];
+typecontr.text = _type ;
 
 }
 
@@ -95,7 +107,7 @@ blcontr.text =await _blood ;
 @override
   void dispose() {
     // Clean up the controller when the Widget is disposed
-    adcontr.dispose();
+    idcontr.dispose();
     super.dispose(); 
   }
 //////////////////////////////////////////
@@ -106,12 +118,12 @@ blcontr.text =await _blood ;
 void _save () {
 
 
-var url = "localhost" ;
-http.post(url, body: {"name" :nacontr.text , "birth" : _DOB , "blood": blcontr.text 
-, "phone": phcontr.text , "address": adcontr.text}) ;
+var url = globals.domain+"profile/" ;
+http.post(url, body: {"name" :nacontr.text , "birth" : _DOB , "type": typecontr.text
+, "phone": phcontr.text , "id": idcontr.text}) ;
 
 
-  setState(() {_address = adcontr.text ; _name= nacontr.text ;_blood = blcontr.text ;
+  setState(() {_id = idcontr.text ; _name= nacontr.text ;_type = typecontr.text ;
   _phone = phcontr.text ; });
 
 }
@@ -237,7 +249,7 @@ Padding(
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Material(
-                          child: Text("ADDRESS",
+                          child: Text("id",
                               style: TextStyle(
                                 color: Colors.green,
                               )),
@@ -247,7 +259,7 @@ Padding(
                     Flexible(
                       child: Material(
                         child: TextFormField(
-                          controller: adcontr,
+                          controller: idcontr,
                           textInputAction: TextInputAction.done,
                         
                           onEditingComplete: ()=> _save() ,
@@ -305,7 +317,7 @@ Padding(
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Material(
-                          child: Text("BLOOD TYPE",
+                          child: Text("TYPE",
                               style: TextStyle(
                                 color: Colors.green,
                               )),
@@ -315,7 +327,7 @@ Padding(
                     Flexible(
                       child: Material(
                         child: TextFormField(
-                          controller: blcontr,
+                          controller: typecontr,
                           textInputAction: TextInputAction.done,
                         
                           onEditingComplete: ()=> _save() ,
