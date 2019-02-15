@@ -16,9 +16,9 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.core.exceptions import PermissionDenied
 from django.db import IntegrityError
 
-#path_wkthmltopdf = r'/usr/bin/wkhtmltopdf'
-path_wkthmltopdf = r'C:\wkhtmltopdf\bin\wkhtmltopdf.exe'
-    
+path_wkthmltopdf = r'/usr/bin/wkhtmltopdf'
+#path_wkthmltopdf = r'C:\wkhtmltopdf\bin\wkhtmltopdf.exe'
+
 config = pdfkit.configuration(wkhtmltopdf=path_wkthmltopdf)
 
 def genPDF(target,title,content):
@@ -291,7 +291,7 @@ class Submit_Feedback(APIView):
         serializer = FeedbackSerializer(data=request.data)
         if serializer.is_valid():
             feedback=Feedback.objects.create(title=serializer.data['title'], content=serializer.data['content'], maker=user)
-            
+
             return Response(serializer.data)
 
         else:
