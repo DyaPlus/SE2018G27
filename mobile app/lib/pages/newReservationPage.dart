@@ -16,37 +16,69 @@ class NewReservation extends StatefulWidget {
 class NewReservationState extends State<NewReservation> {
   final Map<String, dynamic> newReservation = {
     'doctor': null,
-    'slot': null,
+    'slot_id': null,
   };
 
   List doctors = [
-    {'id': 0, 'username': " "},
+    {
+      'id': 0,
+      'username': "waiting...",
+    }
+  ];
+
+  List slots = [
+    {
+      'id': 0,
+      'time': 'waiting...',
+    }
   ];
 
   Future getDoctors() async {
-    var res = await http.get(globals.domain + "users/docs/");
-    var resBody = json.decode(res.body);
-
-    setState(() {
-      doctors = resBody;
-    });
-  }
-
-  Future querySlot() async {
-
-    var docId;
-    doctors.forEach((doc){
-      if (doc['username'] == newReservation['doctor']){
-        docId = doc['id'];
-      }
-    });
-
-    http.Response response = await http.get(
-      globals.domain + 'users/queryslot/$docId',
+    var res = await http.get(
+      globals.domain + "users/docs/",
       headers: globals.tokenHeader,
     );
-    print(response.statusCode);
-    print(response.body);
+
+    var resBody = json.decode(utf8.decode(res.bodyBytes));
+
+    if (res.statusCode == 200) {
+      doctors = resBody;
+    }
+  }
+
+  Future querySlot(String doc) async {
+    var docID = '0';
+
+    for (var doctor in doctors) {
+      if (doctor['full_name'] == doc) {
+        docID = doctor['id'].toString();
+        break;
+      }
+    }
+
+    http.Response res = await http.get(
+      globals.domain + 'users/queryslot/$docID',
+      headers: globals.tokenHeader,
+    );
+
+    var resBody = json.decode(res.body);
+
+    print(res.statusCode);
+    print(resBody);
+
+    if (res.statusCode == 200) {
+      slots = resBody;
+    } else if (resBody['errors'] == 'No Slots Available') {
+      slots[0]['time'] = ['No slots available'];
+      showDialog(
+        context: context,
+        builder: (BuildContext context) => AlertDialog(
+          title: Text("Error"),
+          content: Text("No Slots Available"),
+        ),
+      );
+    }
+    print(slots);
   }
 
   Future sendReservation() async {
@@ -56,18 +88,20 @@ class NewReservationState extends State<NewReservation> {
       headers: globals.tokenHeader,
       body: newReservation,
     );
-    print(globals.tokenHeader);
     print(response.statusCode);
     print(response.body);
+
+    return null;
   }
 
   void showAlert(BuildContext context) {
-    if (newReservation['doctor'] != null && newReservation['slot'] != null)
+    if (newReservation['slot_id'] != null)
       showDialog(
           context: context,
           builder: (BuildContext context) => AlertDialog(
                 title: Text("New Reservation"),
-                content: Text('Reserve?'),
+                content: Text(
+                    '${newReservation['doctor']}: ${newReservation['slot_id']} ?'),
                 actions: <Widget>[
                   FlatButton(
                     child: Text('No'),
@@ -104,48 +138,46 @@ class NewReservationState extends State<NewReservation> {
   }
 
   @override
-  void initState() {
-    super.initState();
-    this.getDoctors();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Page(
-      hasDrawer: true,
       title: "New Reservation",
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: <Widget>[
-            MyDropDown(
-              title: "Doctors",
-              items: doctors.map((doctor) => doctor['username']).toList(),
-              onChanged: (value) => newReservation['doctor'] = value,
-            ),
-            MyRoundedButton(
-              text: "Select slot",
-              onPressed: () async {
-                newReservation['slot'] = await showDatePicker(
-                  context: context,
-                  firstDate: DateTime.now(),
-                  lastDate: DateTime(2020),
-                  initialDate: DateTime.now(),
-                  initialDatePickerMode: DatePickerMode.day,
-                );
-                TimeOfDay time = await showTimePicker(
-                  context: context,
-                  initialTime: TimeOfDay.now(),
-                );
-                newReservation['slot'] = newReservation['slot']
-                    .add(Duration(hours: time.hour, minutes: time.minute));
+      hasDrawer: true,
+      body: FutureBuilder(
+        future: getDoctors(),
+        builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(child: CircularProgressIndicator());
+          }
 
-                newReservation['slot'] = newReservation['slot'].toString();
-                querySlot();
-              },
-            ),
-          ],
-        ),
+          if (snapshot.connectionState == ConnectionState.done) {
+            return Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: <Widget>[
+                  MyDropDown(
+                    title: "Doctors",
+                    items:
+                        doctors.map((doctor) => doctor['full_name']).toList(),
+                    onChanged: (value) => querySlot(value),
+                  ),
+                  MyDropDown(
+                    title: "Slots",
+                    items: slots.map((slot) => slot['time']).toList(),
+                    onChanged: (value) {
+                      slots.forEach((slot) {
+                        if (slot['time'] == value) {
+                          newReservation['slot_id'] = slot['id'].toString();
+                        }
+                      });
+                    },
+                  ),
+                ],
+              ),
+            );
+          } else if (snapshot.hasError) {
+            return Text(snapshot.error);
+          }
+        },
       ),
       bottomNavigationBar: MyBottomAppBar(),
       floatingActionButton: FloatingActionButton.extended(
