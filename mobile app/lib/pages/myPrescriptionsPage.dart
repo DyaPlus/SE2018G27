@@ -44,7 +44,6 @@ class MyPrescriptionsState extends State<MyPrescriptions> {
             return ListView.builder(
               itemCount: snapshot.data.length,
               itemBuilder: (BuildContext context, int i) => MyCard(
-                    delete: () {},
                     title: Text("${snapshot.data[i]['name']}"),
                     subtitle: Text(""),
                     icon: Icons.book,

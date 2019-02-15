@@ -23,10 +23,8 @@ class MyReservationsState extends State<MyReservations> {
       headers: globals.tokenHeader,
     );
 
-    var resBody = json.decode(res.body);
-
     if (res.statusCode == 200) {
-      reservations = resBody;
+      reservations = json.decode(res.body);
     }
   }
 
@@ -54,17 +52,16 @@ class MyReservationsState extends State<MyReservations> {
             return Center(child: CircularProgressIndicator());
           }
 
-          if (snapshot.hasData) {
+          if (snapshot.connectionState == ConnectionState.done) {
             return ListView.builder(
-              itemCount: snapshot.data.length,
+              itemCount: reservations.length,
               itemBuilder: (BuildContext context, int i) => MyCard(
-                    delete: () {},
-                    title: Text("${snapshot.data[i]['name']}"),
-                    subtitle: Text(""),
+                    title: Text("${reservations[i]['slot']}"),
+                    subtitle: Text("${reservations[i]['doctor']}"),
                     icon: Icons.book,
                     onTap: () => Navigator.of(context).push(MaterialPageRoute(
                         builder: (context) =>
-                            AppointmentDetailsPage(snapshot.data[i]))),
+                            AppointmentDetailsPage(reservations[i]))),
                   ),
             );
           } else if (snapshot.hasError) {
