@@ -96,15 +96,15 @@ class Page extends StatelessWidget {
                               builder: (context) => MyPrescriptions()),
                           (Route<dynamic> route) => false);
                     },
-                    title: Text("Prescriptions"),
-                  ),
-                  ListTile(
-                    onTap: () {
-                      Navigator.pushAndRemoveUntil(
-                          context,
-                          MaterialPageRoute(builder: (context) => MyReports()),
-                          (Route<dynamic> route) => false);
-                    },
+                  //   title: Text("Prescriptions"),
+                  // ),
+                  // ListTile(
+                  //   onTap: () {
+                  //     Navigator.pushAndRemoveUntil(
+                  //         context,
+                  //         MaterialPageRoute(builder: (context) => MyReports()),
+                  //         (Route<dynamic> route) => false);
+                  //   },
                     title: Text("Reports"),
                   ),
                   Divider(color: Colors.redAccent),
