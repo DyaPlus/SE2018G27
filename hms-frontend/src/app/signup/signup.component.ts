@@ -20,7 +20,8 @@ export class SignupComponent implements OnInit {
   full_name:any;
   type:any;
   national_id:any;
-  
+  error=false
+  errors:any
   
   
   submit(params:any) 
@@ -49,13 +50,11 @@ export class SignupComponent implements OnInit {
     console.log("POST Request is successful ", data);
     localStorage.setItem('currentUser', JSON.stringify({ token: data['token'], type: data['user_type'] }));
     this.router.navigateByUrl("/HomePage")
-
     },
-    
     error  => {
-    
+    this.errors=error
+    this.error=true
     console.log("Error", error);
-    
     }
     
     );

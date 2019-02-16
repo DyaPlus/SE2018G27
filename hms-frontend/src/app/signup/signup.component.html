@@ -13,7 +13,7 @@
                 </div>
 
                 <div class="form-group">
-                  <label for="password2">password2</label>
+                  <label for="password2">Re-Enter password</label>
                   <input type="text" ngModel  name="password2"  #password2="ngModel" class="form-control" id="password2" placeholder="password2">
                 </div>
 
@@ -23,7 +23,8 @@
                 </div>
 
                 <div class="form-group">
-                  <label for="type">type</label>
+                  <label for="type">Type</label>
+                  <p>Please enter P for patient or R for Receptionst or D for Doctor </p>
                   <input type="text" ngModel  name="type"  #type="ngModel" class="form-control" id="type" placeholder="type">
                 </div>
 
@@ -38,14 +39,20 @@
                 </div>
 
 
-
+                <div *ngIf="error" style="text-align:center;color:red;font-size:bolder">
+                  invalid data Please enter Valid data
+                </div>
 
                 <button>Submit</button>
+                
+                
                 
   </div>
   
 </form>
-
+<br>
+<br>
+<br>
 
 
 
