@@ -33,6 +33,7 @@ class NewReservationState extends State<NewReservation> {
   ];
 
   var docID = '0';
+  var currentValue;
 
   Future getDoctors() async {
     var res = await http.get(
@@ -80,9 +81,42 @@ class NewReservationState extends State<NewReservation> {
       headers: globals.tokenHeader,
       body: newReservation,
     );
+    var responseBody = json.decode(response.body);
+
     print(response.statusCode);
     print(response.body);
 
+    if (response.statusCode == 201) {
+      showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+                content: Text(
+                  "Appointment made at ${responseBody['slot']}",
+                  style: TextStyle(color: Colors.white),
+                ),
+                backgroundColor: Colors.green,
+                actions: <Widget>[
+                  FlatButton(
+                    child: Text("OK",style: TextStyle(color: Colors.white)),
+                    onPressed: () => Navigator.pushAndRemoveUntil(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => MyReservations()),
+                        (Route<dynamic> route) => false),
+                  ),
+                ],
+              ));
+    } else {
+      showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+                content: Text(
+                  responseBody['errors'].values.first.toString(),
+                  style: TextStyle(color: Colors.white),
+                ),
+                backgroundColor: Colors.red,
+              ));
+    }
     return null;
   }
 
@@ -91,8 +125,8 @@ class NewReservationState extends State<NewReservation> {
       showDialog(
           context: context,
           builder: (BuildContext context) => AlertDialog(
-                title: Text("New Reservation"),
-                content: Text('${newReservation['slot_id']} ?'),
+                title: Text("Confirm new reservation"),
+                content: Text('Are you sure you want to make an appointment?'),
                 actions: <Widget>[
                   FlatButton(
                     child: Text('No'),
@@ -102,12 +136,6 @@ class NewReservationState extends State<NewReservation> {
                     child: Text("Yes"),
                     onPressed: () {
                       sendReservation();
-                      Navigator.pushAndRemoveUntil(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => MyReservations()),
-                          (Route<dynamic> route) => false);
-                      //Navigator.pop(context);
                     },
                   )
                 ],
@@ -150,10 +178,12 @@ class NewReservationState extends State<NewReservation> {
                     children: <Widget>[
                       MyDropDown(
                         title: "Doctors",
+                        currentValue: currentValue,
                         items: doctors
                             .map((doctor) => doctor['username'])
                             .toList(),
                         onChanged: (value) {
+                          currentValue = value;
                           for (var doctor in doctors) {
                             if (doctor['username'] == value) {
                               docID = doctor['id'].toString();

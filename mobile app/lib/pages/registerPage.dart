@@ -60,6 +60,8 @@ class RegisterPageState extends State<RegisterPage> {
 
     if (response.statusCode == 200) {
       globals.setToken(responseData['token']);
+      globals.fullName = userInfo['full_name'];
+      globals.userName = userInfo['username'];
 
       return showDialog(
         context: context,

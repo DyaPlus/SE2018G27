@@ -53,7 +53,7 @@ class MyReservationsState extends State<MyReservations> {
           }
 
           if (snapshot.connectionState == ConnectionState.done) {
-            if (snapshot.hasData) {
+            if (reservations.isNotEmpty) {
               return ListView.builder(
                 itemCount: reservations.length,
                 itemBuilder: (BuildContext context, int i) => MyCard(

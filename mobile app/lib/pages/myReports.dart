@@ -1,12 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import 'reportDetails.dart';
+import 'package:flutter_pdf_viewer/flutter_pdf_viewer.dart' as PDF;
 
 import 'package:hms/myWidgets.dart';
-import 'newReservationPage.dart';
-import 'appointmentDetails.dart';
-import 'package:intl/intl.dart';
 import 'package:hms/globals.dart' as globals;
 
 class MyReports extends StatefulWidget {
@@ -17,7 +14,6 @@ class MyReports extends StatefulWidget {
 }
 
 class MyReportsState extends State<MyReports> {
-  final DateFormat formatter = DateFormat('yyyy-MM-dd');
   List myReports = [];
 
   Future getReports() async {
@@ -28,12 +24,17 @@ class MyReportsState extends State<MyReports> {
 
     var resBody = json.decode(res.body);
 
-    print(res.statusCode);
-    print(resBody);
-
     if (res.statusCode == 200) {
       myReports = resBody;
     }
+  }
+
+  Future viewPDF(var reportID) async {
+    http.Response response = await http.get(
+        globals.domain + 'users/getreportpdf/0/$reportID/',
+        headers: globals.tokenHeader);
+
+    PDF.PdfViewer.loadBytes(response.bodyBytes);
   }
 
   @override
@@ -62,8 +63,7 @@ class MyReportsState extends State<MyReports> {
                     title: Text("${myReports[i]['title']}"),
                     subtitle: Text("${myReports[i]['content']}"),
                     icon: Icons.book,
-                    onTap: () => Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => ReportDetailsPage(myReports[i]))),
+                    onTap: () => viewPDF(myReports[i]['id']),
                   ),
             );
           } else if (snapshot.hasError) {
@@ -71,24 +71,6 @@ class MyReportsState extends State<MyReports> {
           }
         },
       ),
-      /*
-      body: ListView.builder(
-        itemCount: widget.reservations.length,
-        itemBuilder: (BuildContext context, int i) => MyCard(
-              title: Text(formatter.format(widget.reservations[i]['time'])),
-              subtitle: Text(widget.reservations[i]['doctor']),
-              onTap: () => Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) =>
-                      AppointmentDetailsPage(widget.reservations[i]))),
-              delete: () {
-                setState(() {
-                  widget.reservations.removeAt(i);
-                });
-              },
-              icon: Icons.card_giftcard,
-            ),
-      ),
-      */
       bottomNavigationBar: MyBottomAppBar(),
     );
   }

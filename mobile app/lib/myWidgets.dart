@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'pages/myReservationsPage.dart';
 import 'pages/feedback.dart';
-import 'pages/myPrescriptionsPage.dart';
 import 'pages/myReports.dart';
 import 'pages/mainHomePage.dart';
 
@@ -51,24 +50,37 @@ class Page extends StatelessWidget {
                           MaterialPageRoute(
                               builder: (context) => MainHomePage()),
                           (Route<dynamic> route) => false),
-                      child: Row(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
-                          Padding(
-                            padding: EdgeInsets.all(10.0),
-                            child: Icon(
-                              Icons.person,
+                          Row(
+                            children: <Widget>[
+                              Padding(
+                                padding: EdgeInsets.all(10.0),
+                                child: Icon(
+                                  Icons.person,
+                                  color: Colors.white,
+                                ),
+                              ),
+                              Center(
+                                child: Text(
+                                  globals.fullName,
+                                  style: TextStyle(
+                                    fontSize: 25.0,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              )
+                            ],
+                          ),
+                          Text(
+                            globals.userName,
+                            style: TextStyle(
+                              fontSize: 15.0,
                               color: Colors.white,
                             ),
+                            textAlign: TextAlign.left,
                           ),
-                          Center(
-                            child: Text(
-                              userName,
-                              style: TextStyle(
-                                fontSize: 25.0,
-                                color: Colors.white,
-                              ),
-                            ),
-                          )
                         ],
                       ),
                     ),
@@ -92,22 +104,12 @@ class Page extends StatelessWidget {
                     onTap: () {
                       Navigator.pushAndRemoveUntil(
                           context,
-                          MaterialPageRoute(
-                              builder: (context) => MyPrescriptions()),
+                          MaterialPageRoute(builder: (context) => MyReports()),
                           (Route<dynamic> route) => false);
                     },
-                  //   title: Text("Prescriptions"),
-                  // ),
-                  // ListTile(
-                  //   onTap: () {
-                  //     Navigator.pushAndRemoveUntil(
-                  //         context,
-                  //         MaterialPageRoute(builder: (context) => MyReports()),
-                  //         (Route<dynamic> route) => false);
-                  //   },
                     title: Text("Reports"),
                   ),
-                  Divider(color: Colors.redAccent),
+                  Divider(color: Colors.lightBlue),
                   ListTile(
                     leading: RotatedBox(
                         quarterTurns: 2, child: Icon(Icons.exit_to_app)),
@@ -150,7 +152,6 @@ class MyCard extends StatelessWidget {
     return Card(
       color: Colors.blueGrey[50],
       child: InkWell(
-        //splashColor: Colors.lightBlueAccent,
         onTap: onTap,
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -302,12 +303,12 @@ class MyDropDown extends StatefulWidget {
   final String title;
   final List<dynamic> items;
   final Function(dynamic) onChanged;
-
-  MyDropDown({
-    @required this.title,
-    @required this.items,
-    @required this.onChanged,
-  });
+  String currentValue = "";
+  MyDropDown(
+      {@required this.title,
+      @required this.items,
+      @required this.onChanged,
+      this.currentValue});
 
   @override
   MyDropDownState createState() {
@@ -316,7 +317,7 @@ class MyDropDown extends StatefulWidget {
 }
 
 class MyDropDownState extends State<MyDropDown> {
-  String _currentValue;
+  //String _currentValue;
 
   @override
   Widget build(BuildContext context) {
@@ -328,10 +329,10 @@ class MyDropDownState extends State<MyDropDown> {
           child: Text(widget.title, style: TextStyle(fontSize: 15.0)),
         ),
         DropdownButton(
-            value: _currentValue,
+            value: widget.currentValue,
             onChanged: (value) {
               setState(() {
-                _currentValue = value;
+                widget.currentValue = value;
               });
               widget.onChanged(value);
             }, //widget.onChanged(value),
