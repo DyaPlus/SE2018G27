@@ -267,11 +267,12 @@ class QueryDoctors(APIView):
         all_users=User.objects.all()
         for account in all_users:
             id=account.id
-            profile=HMSProfile.objects.get(user=account)
+            print(account.profile)
+            if account.profile:
             #print(profile)
             #print("new iteration")
-            if(profile.type == 'D'):
-                Docs.append(account)
+                if(account.profile.type == 'D'):
+                    Docs.append(account)
 
         serializer=UserSerializer(Docs,many=True)
 
