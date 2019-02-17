@@ -8,17 +8,17 @@ class AppointmentDetailsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Page(
-      title: "Appointment",
-      body: Center(
-        child: ListView.builder(
-          itemCount: appointment.length,
-          itemBuilder: (context, int i) {
-            var keys = appointment.keys.toList();
-            var values = appointment.values.toList();
-            return Text("${keys[i]}: ${values[i]}");
-          },
-        ),
-      ),
-    );
+        title: "Appointment",
+        body: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: <Widget>[
+              Text("Time: ${appointment['slot']}",
+                  style: TextStyle(fontSize: 25.0)),
+              Text("Doctor: ${appointment['doctor']}",
+                  style: TextStyle(fontSize: 25.0)),
+            ],
+          ),
+        ));
   }
 }

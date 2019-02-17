@@ -15,23 +15,25 @@ class NewReservation extends StatefulWidget {
 
 class NewReservationState extends State<NewReservation> {
   final Map<String, dynamic> newReservation = {
-    'doctor': null,
     'slot_id': null,
   };
 
   List doctors = [
     {
-      'id': 0,
+      'id': '0',
       'username': "waiting...",
     }
   ];
 
   List slots = [
     {
-      'id': 0,
+      'id': '0',
       'time': 'waiting...',
     }
   ];
+
+  var docID = '0';
+  var currentValue;
 
   Future getDoctors() async {
     var res = await http.get(
@@ -39,23 +41,12 @@ class NewReservationState extends State<NewReservation> {
       headers: globals.tokenHeader,
     );
 
-    var resBody = json.decode(utf8.decode(res.bodyBytes));
-
     if (res.statusCode == 200) {
-      doctors = resBody;
+      doctors = json.decode(utf8.decode(res.bodyBytes));
     }
   }
 
   Future querySlot(String doc) async {
-    var docID = '0';
-
-    for (var doctor in doctors) {
-      if (doctor['full_name'] == doc) {
-        docID = doctor['id'].toString();
-        break;
-      }
-    }
-
     http.Response res = await http.get(
       globals.domain + 'users/queryslot/$docID',
       headers: globals.tokenHeader,
@@ -67,15 +58,17 @@ class NewReservationState extends State<NewReservation> {
     print(resBody);
 
     if (res.statusCode == 200) {
-      slots = resBody;
+      setState(() {
+        slots = resBody;
+      });
     } else if (resBody['errors'] == 'No Slots Available') {
-      slots[0]['time'] = ['No slots available'];
+      slots[0]['time'] = 'No slots available';
       showDialog(
         context: context,
         builder: (BuildContext context) => AlertDialog(
-          title: Text("Error"),
-          content: Text("No Slots Available"),
-        ),
+              title: Text("Error"),
+              content: Text("No Slots Available"),
+            ),
       );
     }
     print(slots);
@@ -88,9 +81,42 @@ class NewReservationState extends State<NewReservation> {
       headers: globals.tokenHeader,
       body: newReservation,
     );
+    var responseBody = json.decode(response.body);
+
     print(response.statusCode);
     print(response.body);
 
+    if (response.statusCode == 201) {
+      showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+                content: Text(
+                  "Appointment made at ${responseBody['slot']}",
+                  style: TextStyle(color: Colors.white),
+                ),
+                backgroundColor: Colors.green,
+                actions: <Widget>[
+                  FlatButton(
+                    child: Text("OK",style: TextStyle(color: Colors.white)),
+                    onPressed: () => Navigator.pushAndRemoveUntil(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => MyReservations()),
+                        (Route<dynamic> route) => false),
+                  ),
+                ],
+              ));
+    } else {
+      showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+                content: Text(
+                  responseBody['errors'].values.first.toString(),
+                  style: TextStyle(color: Colors.white),
+                ),
+                backgroundColor: Colors.red,
+              ));
+    }
     return null;
   }
 
@@ -99,9 +125,8 @@ class NewReservationState extends State<NewReservation> {
       showDialog(
           context: context,
           builder: (BuildContext context) => AlertDialog(
-                title: Text("New Reservation"),
-                content: Text(
-                    '${newReservation['doctor']}: ${newReservation['slot_id']} ?'),
+                title: Text("Confirm new reservation"),
+                content: Text('Are you sure you want to make an appointment?'),
                 actions: <Widget>[
                   FlatButton(
                     child: Text('No'),
@@ -111,12 +136,6 @@ class NewReservationState extends State<NewReservation> {
                     child: Text("Yes"),
                     onPressed: () {
                       sendReservation();
-                      Navigator.pushAndRemoveUntil(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => MyReservations()),
-                          (Route<dynamic> route) => false);
-                      //Navigator.pop(context);
                     },
                   )
                 ],
@@ -142,42 +161,58 @@ class NewReservationState extends State<NewReservation> {
     return Page(
       title: "New Reservation",
       hasDrawer: true,
-      body: FutureBuilder(
-        future: getDoctors(),
-        builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
-          }
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: <Widget>[
+          FutureBuilder(
+            future: getDoctors(),
+            builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return Center(child: CircularProgressIndicator());
+              }
 
-          if (snapshot.connectionState == ConnectionState.done) {
-            return Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: <Widget>[
-                  MyDropDown(
-                    title: "Doctors",
-                    items:
-                        doctors.map((doctor) => doctor['full_name']).toList(),
-                    onChanged: (value) => querySlot(value),
+              if (snapshot.connectionState == ConnectionState.done) {
+                return Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: <Widget>[
+                      MyDropDown(
+                        title: "Doctors",
+                        currentValue: currentValue,
+                        items: doctors
+                            .map((doctor) => doctor['username'])
+                            .toList(),
+                        onChanged: (value) {
+                          currentValue = value;
+                          for (var doctor in doctors) {
+                            if (doctor['username'] == value) {
+                              docID = doctor['id'].toString();
+                              break;
+                            }
+                          }
+                          querySlot(docID);
+                        },
+                      ),
+                      MyDropDown(
+                          title: "Slots",
+                          items: slots.map((slot) => slot['time']).toList(),
+                          onChanged: (value) {
+                            slots.forEach((slot) {
+                              if (slot['time'] == value) {
+                                newReservation['slot_id'] =
+                                    slot['id'].toString();
+                              }
+                            });
+                          }),
+                    ],
                   ),
-                  MyDropDown(
-                    title: "Slots",
-                    items: slots.map((slot) => slot['time']).toList(),
-                    onChanged: (value) {
-                      slots.forEach((slot) {
-                        if (slot['time'] == value) {
-                          newReservation['slot_id'] = slot['id'].toString();
-                        }
-                      });
-                    },
-                  ),
-                ],
-              ),
-            );
-          } else if (snapshot.hasError) {
-            return Text(snapshot.error);
-          }
-        },
+                );
+              } else if (snapshot.hasError) {
+                return Text(snapshot.error);
+              }
+            },
+          ),
+        ],
       ),
       bottomNavigationBar: MyBottomAppBar(),
       floatingActionButton: FloatingActionButton.extended(

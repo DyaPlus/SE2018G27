@@ -20,7 +20,6 @@ class LoginPageState extends State<LoginPage> {
   };
 
   void _login() async {
-    //var url = 'https://secret-lowlands-85631.herokuapp.com/users/signin/';
     var url = globals.domain + "users/signin/";
     var enteredUserInfoJSON = json.encode(enteredUserInfo);
     final http.Response response = await http.post(url,
@@ -30,6 +29,7 @@ class LoginPageState extends State<LoginPage> {
 
     if (response.statusCode == 200) {
       globals.setToken(responseData['token']);
+      globals.userName = enteredUserInfo['username'];
 
       Navigator.pushAndRemoveUntil(
           context,
@@ -39,8 +39,10 @@ class LoginPageState extends State<LoginPage> {
       return showDialog(
           context: context,
           builder: (BuildContext context) => AlertDialog(
-                title: Text("Error"),
-                content: Text("Wrong Credentials"),
+                title: Text("Error", style: TextStyle(color: Colors.white)),
+                content: Text("Wrong Credentials",
+                    style: TextStyle(color: Colors.white)),
+                backgroundColor: Colors.red,
               ));
     } else {
       return showDialog(

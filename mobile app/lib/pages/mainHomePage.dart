@@ -9,8 +9,6 @@ import 'dart:convert' as convert;
 
 import 'package:hms/globals.dart' as globals;
 
-
-
 // class MainHomePage extends StatelessWidget {
 //   final String name;
 //   MainHomePage({@required this.name});
@@ -33,27 +31,26 @@ import 'package:hms/globals.dart' as globals;
 // }
 
 class MainHomePage extends StatefulWidget {
-  MainHomePage({ name});
+  MainHomePage({name});
   _MainHomePageState createState() => _MainHomePageState();
 }
 
 class _MainHomePageState extends State<MainHomePage> {
-
 ////////////////variables////////////
-DateTime _DOB = DateTime.now();
-String _id =   "please wait";
-String _name = "please wait" ;
-String _phone = "please wait" ;
-String _type = "please wait" ;
+  DateTime _DOB = DateTime.now();
+  String _id = "please wait";
+  String _name = "please wait";
+  String _phone = "please wait";
+  String _type = "please wait";
 
-var url = globals.domain + "users/profile/";
-List data = [];
-  final nacontr = TextEditingController(text: "please wait") ;
-  final idcontr = TextEditingController(text: "please wait") ;
-  final phcontr = TextEditingController(text: "please wait") ;
-  final typecontr = TextEditingController(text: "please wait") ;
+  var url = globals.domain + "users/profile/";
+  List data = [];
+  final nacontr = TextEditingController(text: "please wait");
+  final idcontr = TextEditingController(text: "please wait");
+  final phcontr = TextEditingController(text: "please wait");
+  final typecontr = TextEditingController(text: "please wait");
 
- /////////////////functions /////////////////////
+  /////////////////functions /////////////////////
 // httpget(String url , String field) async{
 //var a = await  http.get(url);
 //var b = convert.jsonDecode(a.body) ;
@@ -62,71 +59,71 @@ List data = [];
 //return b[field] ;
 //}
 
+  initial() async {
+    var res = await http.get(
+      url,
+      headers: globals.tokenHeader,
+    );
 
+    var resBody = json.decode(res.body);
+    print(res.statusCode);
+    print(resBody);
+    int t = await resBody['id'];
+    _id = "$t";
+    idcontr.text = _id;
 
+    _name = await resBody['full_name'];
+    nacontr.text = _name;
 
+    _phone = await (resBody['mobile']);
+    phcontr.text = _phone;
 
+    _type = await resBody['type'];
+    typecontr.text = _type;
 
-initial () async{
-  var res = await http.get(
-    url,
-    headers: globals.tokenHeader,
-  );
-
-  var resBody = json.decode(res.body);
-  print(res.statusCode);
-  print(resBody);
-int t = await resBody['id'];
-_id = "$t";
-idcontr.text = _id ;
-
-_name = await resBody['full_name'];
-nacontr.text = _name;
-
-_phone = await (resBody['mobile']);
-phcontr.text =_phone ;
-
-_type = await resBody['type'];
-typecontr.text = _type ;
-
-}
+    setState(() {
+      globals.fullName = resBody['full_name'];
+    });
+  }
 
 /////////////////////////////////////
 //////////////////
-///
-
+  ///
 
 /////////////////////////donot open again////////////////////////////
- @override
-  void initState()  {
-    initial() ;
-     return super.initState();
+  @override
+  void initState() {
+    initial();
+    return super.initState();
   }
 
-
-@override
+  @override
   void dispose() {
     // Clean up the controller when the Widget is disposed
     idcontr.dispose();
-    super.dispose(); 
+    super.dispose();
   }
 //////////////////////////////////////////
 
 //////////////////
 
+  void _save() {
+    var url = globals.domain + "profile/";
+    http.post(url, body: {
+      "name": nacontr.text,
+      "birth": _DOB,
+      "type": typecontr.text,
+      "phone": phcontr.text,
+      "id": idcontr.text
+    });
 
-void _save () {
-
-
-var url = globals.domain+"profile/" ;
-http.post(url, body: {"name" :nacontr.text , "birth" : _DOB , "type": typecontr.text
-, "phone": phcontr.text , "id": idcontr.text}) ;
-
-
-  setState(() {_id = idcontr.text ; _name= nacontr.text ;_type = typecontr.text ;
-  _phone = phcontr.text ; });
-
-}
+    setState(() {
+      _id = idcontr.text;
+      _name = nacontr.text;
+      _type = typecontr.text;
+      _phone = phcontr.text;
+    });
+  }
 
 /////////////////////////////
 
@@ -139,17 +136,18 @@ http.post(url, body: {"name" :nacontr.text , "birth" : _DOB , "type": typecontr.
         initialDatePickerMode: DatePickerMode.year);
 
     if (picked != null) {
-      _DOB =picked ; //await _save() ;
+      _DOB = picked; //await _save() ;
       setState(() {});
-  } 
+    }
   }
+
 ////////////////////////////////
   @override
   Widget build(BuildContext context) {
     return Page(
-         title: "PROFILE",
+      title: "PROFILE",
       centerTitle: true,
-       hasDrawer: true,
+      hasDrawer: true,
       body: Container(
         child: ListView(children: <Widget>[
           Column(mainAxisSize: MainAxisSize.max, children: <Widget>[
@@ -174,11 +172,10 @@ http.post(url, body: {"name" :nacontr.text , "birth" : _DOB , "type": typecontr.
                     Flexible(
                       child: Material(
                         child: TextFormField(
-                           enabled: false,
-                           onEditingComplete: ()=> _save() ,
+                          enabled: false,
+                          onEditingComplete: () => _save(),
                           textInputAction: TextInputAction.done,
-                         controller: nacontr,
-                         
+                          controller: nacontr,
                         ),
                       ),
                     ),
@@ -195,7 +192,7 @@ http.post(url, body: {"name" :nacontr.text , "birth" : _DOB , "type": typecontr.
                     child: Padding(
                       padding: const EdgeInsets.fromLTRB(8, 8, 8, 8),
                       child: Material(
-                        child: Text("Date Of Birth",
+                        child: Text("Date Created",
                             style: TextStyle(
                               color: Colors.green,
                             )),
@@ -203,26 +200,26 @@ http.post(url, body: {"name" :nacontr.text , "birth" : _DOB , "type": typecontr.
                     ),
                   ),
                   Flexible(
-                    child: Material( 
-                        child: GestureDetector( 
+                    child: Material(
+                        child: GestureDetector(
                       child: Padding(
                         padding: const EdgeInsets.fromLTRB(20, 0, 0, 0),
                         child: Container(
-                         //  width: 200,
-                          child: Text(  
+                          //  width: 200,
+                          child: Text(
                             _DOB.year.toString() +
                                 "-" +
                                 _DOB.month.toString() +
                                 "-" +
-                                _DOB.day.toString() , style:  TextStyle(fontSize: 12),
+                                _DOB.day.toString(),
+                            style: TextStyle(fontSize: 12),
                           ),
-                        )
-                        ,
+                        ),
                       ),
-                    //  onTap: () => _changeDOB(),
+                      //  onTap: () => _changeDOB(),
                     )),
                   ),
-       /*       Flexible(
+                  /*       Flexible(
                 child: Container ( 
                 color: Colors.green ,
         height: 50,
@@ -236,115 +233,66 @@ http.post(url, body: {"name" :nacontr.text , "birth" : _DOB , "type": typecontr.
                 ],
               ),
             ),
-           
-           
-
-
-
-Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: <Widget>[
-                    Flexible(
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Material(
-                          child: Text("id",
-                              style: TextStyle(
-                                color: Colors.green,
-                              )),
-                        ),
-                      ),
-                    ),
-                    Flexible(
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  Flexible(
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
                       child: Material(
-                        child: TextFormField(
-                           enabled: false,
-                          controller: idcontr,
-                          textInputAction: TextInputAction.done,
-                        
-                          onEditingComplete: ()=> _save() ,
-                        ),
+                        child: Text("id",
+                            style: TextStyle(
+                              color: Colors.green,
+                            )),
                       ),
                     ),
-                  ],
-                ),
+                  ),
+                  Flexible(
+                    child: Material(
+                      child: TextFormField(
+                        enabled: false,
+                        controller: idcontr,
+                        textInputAction: TextInputAction.done,
+                        onEditingComplete: () => _save(),
+                      ),
+                    ),
+                  ),
+                ],
               ),
-
-
-
-
-
-Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: <Widget>[
-                    Flexible(
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Material(
-                          child: Text("PHONE",
-                              style: TextStyle(
-                                color: Colors.green,
-                              )),
-                        ),
-                      ),
-                    ),
-                    Flexible(
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  Flexible(
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
                       child: Material(
-                        child: TextFormField(
-                           enabled: false,
-                          controller: phcontr,
-                          textInputAction: TextInputAction.done,
-                        
-                          onEditingComplete: ()=> _save() ,
-                        ),
+                        child: Text("PHONE",
+                            style: TextStyle(
+                              color: Colors.green,
+                            )),
                       ),
                     ),
-                  ],
-                ),
+                  ),
+                  Flexible(
+                    child: Material(
+                      child: TextFormField(
+                        enabled: false,
+                        controller: phcontr,
+                        textInputAction: TextInputAction.done,
+                        onEditingComplete: () => _save(),
+                      ),
+                    ),
+                  ),
+                ],
               ),
-
-
-
-              
-
-Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: <Widget>[
-                    Flexible(
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Material(
-                          child: Text("TYPE",
-                              style: TextStyle(
-                                color: Colors.green,
-                              )),
-                        ),
-                      ),
-                    ),
-                    Flexible(
-                      child: Material(
-                        child: TextFormField(
-                           enabled: false,
-                          controller: typecontr,
-                          textInputAction: TextInputAction.done,
-                        
-                          onEditingComplete: ()=> _save() ,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+            ),
           ]),
-       
-       
-       ]),
+        ]),
       ),
     );
   }
