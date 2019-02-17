@@ -267,12 +267,13 @@ class QueryDoctors(APIView):
         all_users=User.objects.all()
         for account in all_users:
             id=account.id
-            print(account.profile)
-            if account.profile:
-            #print(profile)
-            #print("new iteration")
+            try:
                 if(account.profile.type == 'D'):
                     Docs.append(account)
+            except ObjectDoesNotExist as e:
+                error = e.args[0]
+                print('lol gebtk')
+
 
         serializer=UserSerializer(Docs,many=True)
 
