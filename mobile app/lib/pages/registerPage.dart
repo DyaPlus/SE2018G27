@@ -17,7 +17,7 @@ class RegisterPageState extends State<RegisterPage> {
     'password': '',
     'password2': '',
     'full_name': '',
-    'type': '',
+    'type': 'P',
     'national_id': '',
     'mobile': '',
   };
@@ -52,28 +52,30 @@ class RegisterPageState extends State<RegisterPage> {
   }
 
   Future<String> _getInfo() async {
-    //var url = 'https://secret-lowlands-85631.herokuapp.com/users/signup/';
-    //print(userInfo);
-
     var url = globals.domain + "users/signup/";
     var userInfoJSON = json.encode(userInfo);
     final response = await http.post(url,
         body: userInfoJSON, headers: {"Content-Type": "application/json"});
     final Map<String, dynamic> responseData = json.decode(response.body);
-    print(response.body);
-    print(response.statusCode);
-    print(url);
+
     if (response.statusCode == 200) {
       globals.setToken(responseData['token']);
 
       return showDialog(
         context: context,
         builder: (BuildContext context) => AlertDialog(
-              title: Text("Registered successfully"),
-              content: Text(response.body),
+              backgroundColor: Colors.green,
+              title: Text(
+                "Registered successfully",
+                style: TextStyle(color: Colors.white),
+              ),
+              content: Text(
+                "Welcome ${userInfo['full_name']}",
+                style: TextStyle(color: Colors.white),
+              ),
               actions: <Widget>[
                 FlatButton(
-                  child: Text("OK"),
+                  child: Text("OK", style: TextStyle(color: Colors.white)),
                   onPressed: () {
                     Navigator.pushAndRemoveUntil(
                         context,
@@ -85,9 +87,21 @@ class RegisterPageState extends State<RegisterPage> {
             ),
       );
     } else {
-      print("FAIL");
-      print(response.body);
-
+      var error = responseData['errors'].values.first.toString();
+      return showDialog(
+        context: context,
+        builder: (BuildContext context) => AlertDialog(
+              backgroundColor: Colors.red,
+              title: Text(
+                "Registeration failed",
+                style: TextStyle(color: Colors.white),
+              ),
+              content: Text(
+                error.substring(1, error.length - 2),
+                style: TextStyle(color: Colors.white),
+              ),
+            ),
+      );
     }
   }
 
@@ -183,11 +197,6 @@ class RegisterPageState extends State<RegisterPage> {
             label: "Enter your national ID",
             color: _nationalIDColor,
           ),
-          MyDropDown(
-            title: "Type",
-            items: ["P", "D"],
-            onChanged: (value) => setState(() => userInfo['type'] = value),
-          ),
           Input(
               text: "Mobile number",
               padding: 10.0,
@@ -241,10 +250,8 @@ class RegisterPageState extends State<RegisterPage> {
                 color: _infoReady() ? _buttonColor : Colors.grey,
                 // onPressed: () => _infoReady() ? _getInfo() : _infoNotReady(),
                 onPressed: () {
-
                   if (_infoReady()) {
                     print(_getInfo());
-
                   } else {
                     _infoNotReady();
                   }
