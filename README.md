@@ -33,8 +33,8 @@ Here's a list of the coding parts:
 [Abdallah Ahmed Fathy Hamed](https://github.com/abdallahfathy)<br>
 [Ahmed Mohamed ElRashed](https://github.com/ahmad-ra)<br>
 
-##Live versions
+## Live versions
 
-[**Frontend**] (https://hospital-management-system-g27.herokuapp.com/)
-[**Backend*] (https://secret-lowlands-85631.herokuapp.com)
-[**APK**] (https://www107.zippyshare.com/v/BqoDZn71/file.html)
+[Frontend](https://hospital-management-system-g27.herokuapp.com/)<br>
+[Backend](https://secret-lowlands-85631.herokuapp.com)<br>
+[APK](https://www107.zippyshare.com/v/BqoDZn71/file.html)
